@@ -2,13 +2,17 @@
 using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using Ignite2019.IoT.Orleans.Model;
 using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.DataAccess
 {
     public class DataContext : FrameworkContext
     {
+        public DbSet<Company> Companies { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DataContext(string cs, DBTypeEnum dbtype)
              : base(cs, dbtype)
         {
@@ -24,7 +28,7 @@ namespace Ignite2019.IoT.Orleans.DataAccess
     {
         public DataContext CreateDbContext(string[] args)
         {
-            return new DataContext("你的完整连接字符串", DBTypeEnum.SqlServer);
+            return new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
         }
     }
 
