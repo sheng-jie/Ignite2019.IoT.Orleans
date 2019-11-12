@@ -7,6 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="WalkingTec.Mvvm.Core" Version="3.0.0-rc8" />
-  </ItemGroup >
+  </ItemGroup>
 </Project>
 
