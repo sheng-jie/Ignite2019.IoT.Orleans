@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ignite2019.IoT.Orleans.DataAccess\Ignite2019.IoT.Orleans.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

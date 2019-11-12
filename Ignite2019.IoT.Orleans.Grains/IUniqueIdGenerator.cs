@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.DataAccess;
+using Ignite2019.IoT.Orleans.Model;
 using Orleans;
+using WalkingTec.Mvvm.Core;
 
-namespace Ignite2019.IoT.Orleans.Model.Grains
+namespace Ignite2019.IoT.Orleans.Grains
 {
     /// <summary>
     /// 唯一Id生成器
@@ -22,6 +25,11 @@ namespace Ignite2019.IoT.Orleans.Model.Grains
 
     public class DeviceUniqueIdGenerator:Grain<Segment>,IUniqueIdGenerator
     {
+        public DataContext DataContext { get; set; }
+        public DeviceUniqueIdGenerator()
+        {
+            this.DataContext = new DataContext("Default", DBTypeEnum.SqlServer);
+        }
         public Task<string> NewId()
         {
             var companyId = this.GetPrimaryKey();
@@ -32,10 +40,5 @@ namespace Ignite2019.IoT.Orleans.Model.Grains
 
             return Task.FromResult(newId);
         }
-    }
-
-    public class Segment
-    {
-        public ulong LatestNum { get; set; }
     }
 }
