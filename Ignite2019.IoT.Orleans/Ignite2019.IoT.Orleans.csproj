@@ -15,13 +15,17 @@
     <PackageReference Include="WalkingTec.Mvvm.TagHelpers.LayUI" Version="3.0.0-rc8" />
     <PackageReference Include="WalkingTec.Mvvm.Mvc.Admin" Version="3.0.0-rc8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
  </ItemGroup>
 
   <ItemGroup>
    <ProjectReference Include="..\Ignite2019.IoT.Orleans.Model\Ignite2019.IoT.Orleans.Model.csproj" />
     <ProjectReference Include="..\Ignite2019.IoT.Orleans.DataAccess\Ignite2019.IoT.Orleans.DataAccess.csproj" />
     <ProjectReference Include="..\Ignite2019.IoT.Orleans.ViewModel\Ignite2019.IoT.Orleans.ViewModel.csproj" />
- </ItemGroup >
+ </ItemGroup>
 </Project>
 
 

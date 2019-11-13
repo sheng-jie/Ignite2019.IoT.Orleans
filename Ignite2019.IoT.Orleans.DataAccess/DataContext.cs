@@ -11,8 +11,8 @@ namespace Ignite2019.IoT.Orleans.DataAccess
 {
     public class DataContext : FrameworkContext
     {
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<Product> Products { get; set; }
+        //public DbSet<Company> Companies { get; set; }
+        //public DbSet<Product> Products { get; set; }
         public DataContext(string cs, DBTypeEnum dbtype)
              : base(cs, dbtype)
         {
