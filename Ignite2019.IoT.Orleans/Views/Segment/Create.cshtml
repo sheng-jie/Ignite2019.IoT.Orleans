@@ -1,0 +1,13 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.SegmentVMs.SegmentVM
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:textbox field="Entity.InitialNum" />
+<wt:textbox field="Entity.MaxNum" />
+<wt:combobox field="Entity.ProductId" items="AllProducts"/>
+</wt:row>
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>
