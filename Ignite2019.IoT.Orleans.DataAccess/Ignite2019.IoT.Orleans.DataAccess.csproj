@@ -4,9 +4,14 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20191113152037_add_company_product.cs" />
+    <Compile Remove="Migrations\20191113152037_add_company_product.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <ProjectReference Include="..\Ignite2019.IoT.Orleans.Model\Ignite2019.IoT.Orleans.Model.csproj" />
-  </ItemGroup >
+  </ItemGroup>
 </Project>
 
