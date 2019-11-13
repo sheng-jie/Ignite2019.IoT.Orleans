@@ -3,6 +3,7 @@
 <wt:form vm="@Model">
     <div style="margin-bottom:10px">批量修改以下数据: </div>
 <wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:combobox field="LinkedVM.ProtocolType" />
 </wt:row>
     <wt:hidden field="Ids" />
     <wt:grid vm="ListVM" use-local-data="true" height="300"  hidden-checkbox="true" hidden-panel="true"/>

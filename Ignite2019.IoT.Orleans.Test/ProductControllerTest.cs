@@ -42,8 +42,8 @@ namespace Ignite2019.IoT.Orleans.Test
             ProductVM vm = rv.Model as ProductVM;
             Product v = new Product();
 			
-            v.ID = 42;
-            v.Name = "9n4EA5Mh";
+            v.ID = 44;
+            v.Name = "efGMRt";
             v.CompanyId = AddCompany();
             vm.Entity = v;
             _controller.Create(vm);
@@ -52,8 +52,8 @@ namespace Ignite2019.IoT.Orleans.Test
             {
                 var data = context.Set<Product>().FirstOrDefault();
 				
-                Assert.AreEqual(data.ID, 42);
-                Assert.AreEqual(data.Name, "9n4EA5Mh");
+                Assert.AreEqual(data.ID, 44);
+                Assert.AreEqual(data.Name, "efGMRt");
                 Assert.AreEqual(data.CreateBy, "user");
                 Assert.IsTrue(DateTime.Now.Subtract(data.CreateTime.Value).Seconds < 10);
             }
@@ -67,8 +67,8 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
        			
-                v.ID = 42;
-                v.Name = "9n4EA5Mh";
+                v.ID = 44;
+                v.Name = "efGMRt";
                 v.CompanyId = AddCompany();
                 context.Set<Product>().Add(v);
                 context.SaveChanges();
@@ -81,7 +81,7 @@ namespace Ignite2019.IoT.Orleans.Test
             v = new Product();
             v.ID = vm.Entity.ID;
        		
-            v.Name = "Bm1";
+            v.Name = "gSCe61d";
             vm.Entity = v;
             vm.FC = new Dictionary<string, object>();
 			
@@ -94,7 +94,7 @@ namespace Ignite2019.IoT.Orleans.Test
             {
                 var data = context.Set<Product>().FirstOrDefault();
  				
-                Assert.AreEqual(data.Name, "Bm1");
+                Assert.AreEqual(data.Name, "gSCe61d");
                 Assert.AreEqual(data.UpdateBy, "user");
                 Assert.IsTrue(DateTime.Now.Subtract(data.UpdateTime.Value).Seconds < 10);
             }
@@ -109,8 +109,8 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
         		
-                v.ID = 42;
-                v.Name = "9n4EA5Mh";
+                v.ID = 44;
+                v.Name = "efGMRt";
                 v.CompanyId = AddCompany();
                 context.Set<Product>().Add(v);
                 context.SaveChanges();
@@ -140,8 +140,8 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
 				
-                v.ID = 42;
-                v.Name = "9n4EA5Mh";
+                v.ID = 44;
+                v.Name = "efGMRt";
                 v.CompanyId = AddCompany();
                 context.Set<Product>().Add(v);
                 context.SaveChanges();
@@ -159,10 +159,10 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
 				
-                v1.ID = 42;
-                v1.Name = "9n4EA5Mh";
+                v1.ID = 44;
+                v1.Name = "efGMRt";
                 v1.CompanyId = AddCompany();
-                v2.Name = "Bm1";
+                v2.Name = "gSCe61d";
                 v2.CompanyId = v1.CompanyId; 
                 context.Set<Product>().Add(v1);
                 context.Set<Product>().Add(v2);
@@ -197,7 +197,7 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
 
-                v.ID = 62;
+                v.ID = 97;
                 context.Set<Company>().Add(v);
                 context.SaveChanges();
             }

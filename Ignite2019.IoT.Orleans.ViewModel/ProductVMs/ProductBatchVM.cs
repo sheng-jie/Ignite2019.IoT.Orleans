@@ -25,6 +25,8 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
     /// </summary>
     public class Product_BatchEdit : BaseVM
     {
+        [Display(Name = "协议类型")]
+        public ProtocolType? ProtocolType { get; set; }
 
         protected override void InitVM()
         {

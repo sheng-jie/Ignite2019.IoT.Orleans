@@ -18,9 +18,15 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
         public ProductType? ProductType { get; set; }
         [Display(Name = "协议类型")]
         public ProtocolType? ProtocolType { get; set; }
+        [Display(Name = "联网方式")]
+        public NetType? NetType { get; set; }
+        public List<ComboSelectListItem> AllCompanys { get; set; }
+        [Display(Name = "厂家")]
+        public int? CompanyId { get; set; }
 
         protected override void InitVM()
         {
+            AllCompanys = DC.Set<Company>().GetSelectListItems(LoginUserInfo?.DataPrivileges, null, y => y.Name);
         }
 
     }

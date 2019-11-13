@@ -22,6 +22,9 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
         public ExcelPropety ProductType_Excel = ExcelPropety.CreateProperty<Product>(x => x.ProductType);
         [Display(Name = "协议类型")]
         public ExcelPropety ProtocolType_Excel = ExcelPropety.CreateProperty<Product>(x => x.ProtocolType);
+        [Display(Name = "联网方式")]
+        public ExcelPropety NetType_Excel = ExcelPropety.CreateProperty<Product>(x => x.NetType);
+        [Display(Name = "厂家")]
         public ExcelPropety Company_Excel = ExcelPropety.CreateProperty<Product>(x => x.CompanyId);
 
 	    protected override void InitVM()

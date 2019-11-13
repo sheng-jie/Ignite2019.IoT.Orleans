@@ -5,6 +5,8 @@
 <wt:textbox field="Searcher.Name" />
 <wt:combobox field="Searcher.ProductType" empty-text="全部" />
 <wt:combobox field="Searcher.ProtocolType" empty-text="全部" />
+<wt:combobox field="Searcher.NetType" empty-text="全部" />
+<wt:combobox field="Searcher.CompanyId" items="Searcher.AllCompanys" empty-text="全部" />
 </wt:row>
 </wt:searchpanel>
 <wt:grid vm="@Model" url="/Product/Search"/>

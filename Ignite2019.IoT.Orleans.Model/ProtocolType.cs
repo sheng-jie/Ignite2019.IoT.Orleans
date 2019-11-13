@@ -9,7 +9,7 @@ namespace Ignite2019.IoT.Orleans.Model
     {
         [Display(Name = "MQTT")]
         MQTT,
-        [Display(Name = "MQTT")]
+        [Display(Name = "CoAP")]
         CoAP
     }
 }

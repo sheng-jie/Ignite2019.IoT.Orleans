@@ -36,6 +36,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
                 this.MakeGridHeader(x => x.Version),
                 this.MakeGridHeader(x => x.ProductType),
                 this.MakeGridHeader(x => x.ProtocolType),
+                this.MakeGridHeader(x => x.NetType),
                 this.MakeGridHeader(x => x.Name_view),
                 this.MakeGridHeaderAction(width: 200)
             };
@@ -47,6 +48,8 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
                 .CheckContain(Searcher.Name, x=>x.Name)
                 .CheckEqual(Searcher.ProductType, x=>x.ProductType)
                 .CheckEqual(Searcher.ProtocolType, x=>x.ProtocolType)
+                .CheckEqual(Searcher.NetType, x=>x.NetType)
+                .CheckEqual(Searcher.CompanyId, x=>x.CompanyId)
                 .Select(x => new Product_View
                 {
 				    ID = x.ID,
@@ -55,6 +58,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.ProductVMs
                     Version = x.Version,
                     ProductType = x.ProductType,
                     ProtocolType = x.ProtocolType,
+                    NetType = x.NetType,
                     Name_view = x.Company.Name,
                 })
                 .OrderBy(x => x.ID);

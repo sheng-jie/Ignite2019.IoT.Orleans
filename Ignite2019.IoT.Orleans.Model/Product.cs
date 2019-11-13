@@ -34,11 +34,16 @@ namespace Ignite2019.IoT.Orleans.Model
         [Required(ErrorMessage = "{0}是必填项")]
         public ProtocolType ProtocolType { get; set; }
 
+        [Display(Name = "联网方式")]
+        public NetType NetType { get; set; }
+
         [Display(Name = "段号")]
         public List<Segment> Segments { get; set; }
 
         [Required]
+        [Display(Name = "厂家")]
         public int CompanyId { get; set; }
+        [Display(Name = "厂家")]
         public Company Company { get; set; }
 
     }
