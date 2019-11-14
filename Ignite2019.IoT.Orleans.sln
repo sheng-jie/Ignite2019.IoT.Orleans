@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ignite2019.IoT.Orleans.View
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ignite2019.IoT.Orleans.Test", "Ignite2019.IoT.Orleans.Test\Ignite2019.IoT.Orleans.Test.csproj", "{002693B9-F8FC-4F3C-99B1-B5CF60EEE0E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ignite2019.IoT.Orleans.Grains", "Ignite2019.IoT.Orleans.Grains\Ignite2019.IoT.Orleans.Grains.csproj", "{DC6DE14B-253D-4C77-80EE-DFA47D88ACF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ignite2019.IoT.Orleans.Grains", "Ignite2019.IoT.Orleans.Grains\Ignite2019.IoT.Orleans.Grains.csproj", "{DC6DE14B-253D-4C77-80EE-DFA47D88ACF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ignite2019.IoT.Orleans.SiloHost", "Ignite2019.IoT.Orleans.SiloHost\Ignite2019.IoT.Orleans.SiloHost.csproj", "{DC1A651C-E855-4DED-895F-DD51FC182B79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{DC6DE14B-253D-4C77-80EE-DFA47D88ACF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC6DE14B-253D-4C77-80EE-DFA47D88ACF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC6DE14B-253D-4C77-80EE-DFA47D88ACF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC1A651C-E855-4DED-895F-DD51FC182B79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1A651C-E855-4DED-895F-DD51FC182B79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1A651C-E855-4DED-895F-DD51FC182B79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1A651C-E855-4DED-895F-DD51FC182B79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
