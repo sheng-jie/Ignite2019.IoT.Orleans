@@ -17,6 +17,7 @@ namespace Ignite2019.IoT.Orleans.Grains
 
         public override async Task OnActivateAsync()
         {
+            await this.ReadStateAsync();
             await LoadSegment();
         }
 

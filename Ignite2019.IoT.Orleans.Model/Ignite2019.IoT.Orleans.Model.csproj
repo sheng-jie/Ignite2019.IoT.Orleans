@@ -6,6 +6,7 @@
 
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.0.0" />
     <PackageReference Include="WalkingTec.Mvvm.Core" Version="3.0.0-rc8" />
   </ItemGroup>
 </Project>
