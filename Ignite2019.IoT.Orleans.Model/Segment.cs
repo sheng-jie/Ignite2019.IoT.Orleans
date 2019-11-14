@@ -18,5 +18,18 @@ namespace Ignite2019.IoT.Orleans.Model
         public int ProductId { get; set; }
         [Display(Name = "产品")]
         public Product Product { get; set; }
+
+        public bool HasRemain => this.Remain > 0;
+
+        public static Segment AddNewSegment(int productId, ulong initialNum)
+        {
+            return new Segment()
+            {
+                ProductId = productId,
+                InitialNum = initialNum,
+                MaxNum = initialNum + 0x1000,
+                Remain = 0x1000
+            };
+        }
     }
 }
