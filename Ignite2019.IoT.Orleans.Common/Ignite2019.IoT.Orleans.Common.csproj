@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="orleans.appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Reminders.AzureStorage" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.0.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="orleans.appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

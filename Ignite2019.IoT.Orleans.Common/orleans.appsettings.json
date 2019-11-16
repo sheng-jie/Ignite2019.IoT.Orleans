@@ -1,0 +1,10 @@
+﻿{
+  "ConnectionStrings": {
+    "default": "Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "orleans_azure_table": "DefaultEndpointsProtocol=https;AccountName=shengjie;AccountKey=IrXu5W6vrvK75qQlFAjbhjrUcwO9GOUWpiMbrJpRbVHnRDeK3Vb0PPzYndG2iuiUdRmi3fvVwzgzqCWaVycFyA==;TableEndpoint=https://shengjie.table.cosmos.azure.com:443/;"
+  },
+  "Cluster": {
+    "ClusterId": "Ignite.IoT.Orleans",
+    "ServiceId": "Ignite.IoT.Orleans"
+  }
+}
