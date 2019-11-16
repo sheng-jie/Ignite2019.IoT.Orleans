@@ -14,6 +14,7 @@ namespace Ignite2019.IoT.Orleans.DataAccess
         
         public DbSet<Company> Companies { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Device> Devices { get; set; }
         public DbSet<Segment> Segments { get; set; }
         public DbSet<EventHistory> EventHistories { get; set; }
 
