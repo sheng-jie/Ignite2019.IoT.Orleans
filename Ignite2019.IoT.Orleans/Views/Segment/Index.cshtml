@@ -1,8 +1,0 @@
-﻿@model Ignite2019.IoT.Orleans.ViewModel.SegmentVMs.SegmentListVM
-
-<wt:searchpanel vm="@Model" reset-btn="true">
-<wt:row items-per-row="ItemsPerRowEnum.Three">
-<wt:combobox field="Searcher.ProductId" items="Searcher.AllProducts" empty-text="全部" />
-</wt:row>
-</wt:searchpanel>
-<wt:grid vm="@Model" url="/Segment/Search"/>
