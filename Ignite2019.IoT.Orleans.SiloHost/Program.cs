@@ -5,6 +5,8 @@ using Ignite2019.IoT.Orleans.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
@@ -15,48 +17,72 @@ namespace Ignite2019.IoT.Orleans.SiloHost
     {
         static Task Main(string[] args)
         {
-            var builder = new SiloHostBuilder();
-            builder.ConfigureAppConfiguration((configurationBuilder =>
+            Console.Title = "Silo.Host";
+
+            var hostBuilder = new HostBuilder();
+
+            hostBuilder.ConfigureAppConfiguration(configurationBuilder =>
             {
                 configurationBuilder.AddJsonFile("appsettings.json");
-            }));
-
-
-            builder.UseAzureStorageClustering(options => { options.ConnectionString = ""; })
-                .Configure<ClusterOptions>(options =>
-                {
-                    options.ClusterId = typeof(Program).Namespace;
-                    options.ServiceId = typeof(Program).Namespace;
-                })
-                .AddAzureTableGrainStorageAsDefault(options =>
-                {
-                    options.ConnectionString = "";
-                    options.UseJson = true;
-                })
-                .UseAzureTableReminderService(configure => configure.ConnectionString = "");
-            builder.ConfigureApplicationParts(parts => parts.AddFromApplicationBaseDirectory().WithReferences());
-
-            builder.UseDashboard(options =>
-            {
-                options.Host = "*";
-                options.Port = 8080;
-                options.HostSelf = true;
-                options.CounterUpdateIntervalMs = 10000;
             });
 
-            builder.ConfigureServices((context, collection) =>
+
+            hostBuilder.UseOrleans((context, builder) =>
             {
-                collection.AddDbContextPool<DataContext>(
-                    optionsBuilder =>
+                var azureTableConStr = context.Configuration.GetConnectionString("orleans_azure_table");
+
+                builder.UseAzureStorageClustering(options =>
                     {
-                        var connStr = context.Configuration.GetConnectionString("Default");
-                        optionsBuilder.UseSqlServer(connStr);
+                        options.ConnectionString = azureTableConStr;
+                        options.TableName = "Cluster";
+                    }).ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+                    .Configure<ClusterOptions>(options =>
+                    {
+                        options.ClusterId = "Ignite.IoT.Orleans";
+                        options.ServiceId = "Ignite.IoT.Orleans";
                     });
 
+                builder.AddAzureTableGrainStorageAsDefault(options =>
+                {
+                    options.ConnectionString = azureTableConStr;
+                    options.TableName = "Storage";
+                    options.UseJson = true;
+                });
 
+                builder.UseAzureTableReminderService(configure =>
+                {
+                    configure.ConnectionString = azureTableConStr;
+                    configure.TableName = "Reminder";
+                });
+
+                builder.ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole());
+
+
+                builder.ConfigureApplicationParts(parts => parts.AddFromApplicationBaseDirectory().WithReferences());
+
+                builder.UseDashboard(options =>
+                {
+                    options.Host = "*";
+                    options.Port = 8080;
+                    options.HostSelf = true;
+                    options.CounterUpdateIntervalMs = 10000;
+                });
+
+                var sqlServerConnStr = context.Configuration.GetConnectionString("Default");
+                builder.ConfigureServices(services =>
+                {
+                    services.AddDbContextPool<DataContext>(
+                        optionsBuilder =>
+                        {
+                            optionsBuilder.UseSqlServer(sqlServerConnStr);
+                        });
+
+
+                });
             });
 
-                return builder.Build().StartAsync();
-            }
+
+            return hostBuilder.Build().StartAsync();
+        }
     }
-    }
+}

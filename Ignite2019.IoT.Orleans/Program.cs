@@ -1,14 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Swagger;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
 using WalkingTec.Mvvm.TagHelpers.LayUI;
@@ -52,8 +46,14 @@ namespace Ignite2019.IoT.Orleans
                          }
                          x.UseFrameworkService();
                      });
-                 }
-                 );
+                 })
+                 .ConfigureServices(services =>
+                 {
+                     services.AddSingleton<ClusterClientHostedService>();
+                     services.AddSingleton<IHostedService>(_ => _.GetService<ClusterClientHostedService>());
+                     //services.AddHostedService<OrleansClientHostedService>();
+                     services.AddSingleton(_ => _.GetService<ClusterClientHostedService>().Client);
+                 });
         }
     }
 }
