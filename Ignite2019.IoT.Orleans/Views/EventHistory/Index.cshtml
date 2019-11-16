@@ -1,0 +1,10 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.EventHistoryVMs.EventHistoryListVM
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:textbox field="Searcher.DeviceId" />
+<wt:combobox field="Searcher.EventType" empty-text="全部" />
+<wt:textbox field="Searcher.UserId" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/EventHistory/Search"/>

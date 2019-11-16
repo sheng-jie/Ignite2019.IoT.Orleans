@@ -1,0 +1,16 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.EventHistoryVMs.EventHistoryVM
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:textbox field="Entity.DeviceId" />
+<wt:combobox field="Entity.EventType" />
+<wt:textbox field="Entity.Detail" />
+<wt:datetime field="Entity.UpdateTime" />
+<wt:textbox field="Entity.UserId" />
+</wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>
