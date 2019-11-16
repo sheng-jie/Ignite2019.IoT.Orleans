@@ -1,4 +1,4 @@
-﻿namespace Ignite2019.IoT.Orleans.Models
+﻿namespace Ignite2019.IoT.Orleans.Model
 {
     public enum DeviceBindStatus
     {

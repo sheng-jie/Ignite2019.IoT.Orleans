@@ -1,8 +1,10 @@
 ﻿namespace Ignite2019.IoT.Orleans.Model
 {
-    public enum CommandType
+    public enum EventType
     {
+        UnlockRequest,
         Unlock,
+        Lock,
         Online,
         Offline,
         Alarm

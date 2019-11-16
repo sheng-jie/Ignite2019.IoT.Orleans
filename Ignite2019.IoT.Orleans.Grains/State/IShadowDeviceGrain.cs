@@ -1,30 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Model;
 using Orleans;
-using Orleans.Runtime;
 
 
 namespace Ignite2019.IoT.Orleans.Grains.State
 {
-    public interface IShadowDeviceGrain:IGrainWithStringKey
+    public interface IShadowDeviceGrain : IGrainWithStringKey
     {
-        Task<Device> GetShadowDevice();
-    }
+        Task<ShadowDevice> GetShadowDevice();
 
-    public class ShadowDeviceGrain:Grain,IShadowDeviceGrain
-    {
-        public ShadowDeviceGrain(IPersistentState<ShadowDevice> device)
-        {
-            
-        }
-        public Task<Device> GetShadowDevice()
-        {
-            throw new System.NotImplementedException();
-        }
-    }
+        Task AddEventHistory(EventHistory newHistory);
 
-    public class ShadowDevice
-    {
-
+        Task UpdateStatus(bool isOnline);
     }
 }

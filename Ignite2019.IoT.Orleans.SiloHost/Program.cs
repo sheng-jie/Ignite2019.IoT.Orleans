@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.DataAccess;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
@@ -41,7 +44,19 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                 options.CounterUpdateIntervalMs = 10000;
             });
 
-            return builder.Build().StartAsync();
-        }
+            builder.ConfigureServices((context, collection) =>
+            {
+                collection.AddDbContextPool<DataContext>(
+                    optionsBuilder =>
+                    {
+                        var connStr = context.Configuration.GetConnectionString("Default");
+                        optionsBuilder.UseSqlServer(connStr);
+                    });
+
+
+            });
+
+                return builder.Build().StartAsync();
+            }
     }
-}
+    }
