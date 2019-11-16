@@ -1,0 +1,12 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.DeviceVMs.DeviceListVM
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:textbox field="Searcher.ID" />
+<wt:textbox field="Searcher.Name" />
+<wt:textbox field="Searcher.Remark" />
+<wt:datetime field="Searcher.CreateTime" />
+<wt:combobox field="Searcher.ProductId" items="Searcher.AllProducts" empty-text="全部" />
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/Device/Search"/>

@@ -22,6 +22,7 @@ namespace Ignite2019.IoT.Orleans.Model
         [Display(Name = "设备备注")]
         public string Remark { get; set; }
 
+        [Display(Name = "创建时间")]
         public DateTime CreateTime { get; set; }
 
         [Display(Name = "所属产品")]

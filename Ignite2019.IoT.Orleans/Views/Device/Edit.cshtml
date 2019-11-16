@@ -1,0 +1,14 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.DeviceVMs.DeviceVM
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:textbox field="Entity.Name" />
+<wt:textbox field="Entity.Remark" />
+<wt:combobox field="Entity.ProductId" items="AllProducts"/>
+</wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>
