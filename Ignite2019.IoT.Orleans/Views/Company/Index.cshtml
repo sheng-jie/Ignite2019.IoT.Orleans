@@ -1,8 +1,0 @@
-﻿@model Ignite2019.IoT.Orleans.ViewModel.CompanyVMs.CompanyListVM
-
-<wt:searchpanel vm="@Model" reset-btn="true">
-<wt:row items-per-row="ItemsPerRowEnum.Three">
-<wt:textbox field="Searcher.Name" />
-</wt:row>
-</wt:searchpanel>
-<wt:grid vm="@Model" url="/Company/Search"/>
