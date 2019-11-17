@@ -73,15 +73,19 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                 });
 
                 var sqlServerConnStr = con.ConnectionStrings.FirstOrDefault(cs => cs.Key == "default")?.Value;
-                
+
                 builder.ConfigureServices(services =>
                 {
                     services.AddSingleton<Configs>(con);
-                    services.AddDbContext<DataContext>(
-                        optionsBuilder =>
-                        {
-                            optionsBuilder.UseSqlServer(sqlServerConnStr);
-                        });
+                    services.AddDbContextPool<DbContext>(optionsBuilder =>
+                             optionsBuilder.UseSqlServer(sqlServerConnStr)
+                    );
+
+                    //services.AddDbContext<DataContext>(
+                    //    optionsBuilder =>
+                    //    {
+                    //        optionsBuilder.UseSqlServer(sqlServerConnStr);
+                    //    });
                     GlobalServices.SetServiceProvider(services.BuildServiceProvider());
                 });
             });

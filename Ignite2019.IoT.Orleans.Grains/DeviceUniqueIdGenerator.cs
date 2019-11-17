@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.DataAccess;
 using Ignite2019.IoT.Orleans.Model;
+using Microsoft.EntityFrameworkCore;
 using Orleans;
 using WalkingTec.Mvvm.Core;
 
@@ -9,10 +10,11 @@ namespace Ignite2019.IoT.Orleans.Grains
 {
     public class DeviceUniqueIdGenerator : Grain<Segment>, IUniqueIdGenerator
     {
-        public DataContext DataContext { get; set; }
-        public DeviceUniqueIdGenerator()
+        public DbContext DataContext { get; set; }
+        public DeviceUniqueIdGenerator(DbContext context)
         {
-            this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
+            this.DataContext = context;
+            //this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
         }
 
         public override async Task OnActivateAsync()
@@ -46,7 +48,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             if (!this.State.HasRemain)
             {
                 ulong maxSegment = 0;
-                var hasSegments = this.DataContext.Segments.Any();
+                var hasSegments = this.DataContext.Set<Segment>().Any();
 
                 if (!hasSegments)
                 {
@@ -54,10 +56,10 @@ namespace Ignite2019.IoT.Orleans.Grains
                 }
                 else
                 {
-                    var hasProductSegment = this.DataContext.Segments.Any(sg => sg.ProductId == (int)productId);
+                    var hasProductSegment = this.DataContext.Set<Segment>().Any(sg => sg.ProductId == (int)productId);
                     if (hasProductSegment)
                     {
-                        var availableSegment = this.DataContext.Segments.FirstOrDefault(sg => sg.ProductId == productId && sg.Remain > 0);
+                        var availableSegment = this.DataContext.Set<Segment>().FirstOrDefault(sg => sg.ProductId == productId && sg.Remain > 0);
                         if (availableSegment != null)
                         {
                             this.State = availableSegment;
@@ -65,11 +67,11 @@ namespace Ignite2019.IoT.Orleans.Grains
                         }
                     }
 
-                    maxSegment = this.DataContext.Segments.Max(s => s.MaxNum);
+                    maxSegment = this.DataContext.Set<Segment>().Max(s => s.MaxNum);
                 }
 
                 var newSegment =
-                    await this.DataContext.Segments.AddAsync(Segment.AddNewSegment((int)productId, maxSegment));
+                    await this.DataContext.Set<Segment>().AddAsync(Segment.AddNewSegment((int)productId, maxSegment));
                 await this.DataContext.SaveChangesAsync();
                 this.State = newSegment.Entity;
             }
@@ -78,7 +80,7 @@ namespace Ignite2019.IoT.Orleans.Grains
         public override async Task OnDeactivateAsync()
         {
             await this.WriteStateAsync();
-            this.DataContext.Segments.Update(this.State);
+            this.DataContext.Set<Segment>().Update(this.State);
 
             await this.DataContext.SaveChangesAsync();
             await base.OnDeactivateAsync();
