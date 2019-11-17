@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.DataAccess;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.SiloHost
 {
@@ -29,7 +31,9 @@ namespace Ignite2019.IoT.Orleans.SiloHost
 
             hostBuilder.UseOrleans((context, builder) =>
             {
-                var azureTableConStr = context.Configuration.GetConnectionString("orleans_azure_table");
+                Configs con = context.Configuration.Get<Configs>() ?? new Configs();
+
+                var azureTableConStr = con.ConnectionStrings.FirstOrDefault(cs => cs.Key == "orleans_azure_table")?.Value;
 
                 builder.UseAzureStorageClustering(options =>
                     {
@@ -68,16 +72,17 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                     options.CounterUpdateIntervalMs = 10000;
                 });
 
-                var sqlServerConnStr = context.Configuration.GetConnectionString("Default");
+                var sqlServerConnStr = con.ConnectionStrings.FirstOrDefault(cs => cs.Key == "default")?.Value;
+                
                 builder.ConfigureServices(services =>
                 {
-                    services.AddDbContextPool<DataContext>(
+                    services.AddSingleton<Configs>(con);
+                    services.AddDbContext<DataContext>(
                         optionsBuilder =>
                         {
                             optionsBuilder.UseSqlServer(sqlServerConnStr);
                         });
-
-
+                    GlobalServices.SetServiceProvider(services.BuildServiceProvider());
                 });
             });
 

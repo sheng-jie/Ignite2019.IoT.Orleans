@@ -12,7 +12,7 @@ namespace Ignite2019.IoT.Orleans.Grains
         public DataContext DataContext { get; set; }
         public DeviceUniqueIdGenerator()
         {
-            this.DataContext = new DataContext("Default", DBTypeEnum.SqlServer);
+            this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
         }
 
         public override async Task OnActivateAsync()
@@ -28,11 +28,14 @@ namespace Ignite2019.IoT.Orleans.Grains
 
             if (this.State.HasRemain)
             {
-                newNum = this.State.MaxNum - this.State.Remain - 1;
+                newNum = this.State.MaxNum - this.State.Remain;
                 this.State.Remain--;
             }
 
+            await this.WriteStateAsync();
+
             var newId = $"{newNum:X16}";
+
             return newId;
         }
 
@@ -42,19 +45,33 @@ namespace Ignite2019.IoT.Orleans.Grains
             // get assigned segments of product.
             if (!this.State.HasRemain)
             {
-                var availableSegment =
-                    this.DataContext.Segments.FirstOrDefault(sg => sg.ProductId == productId && sg.HasRemain);
-                if (availableSegment == null)
+                ulong maxSegment = 0;
+                var hasSegments = this.DataContext.Segments.Any();
+
+                if (!hasSegments)
                 {
-                    var maxSegment = this.DataContext.Segments.Max(s => s.MaxNum);
-                    var newSegment =
-                        await this.DataContext.Segments.AddAsync(Segment.AddNewSegment((int)productId, maxSegment));
-                    this.State = newSegment.Entity;
+                    maxSegment = 0x6400000000;
                 }
                 else
                 {
-                    this.State = availableSegment;
+                    var hasProductSegment = this.DataContext.Segments.Any(sg => sg.ProductId == (int)productId);
+                    if (hasProductSegment)
+                    {
+                        var availableSegment = this.DataContext.Segments.FirstOrDefault(sg => sg.ProductId == productId && sg.Remain > 0);
+                        if (availableSegment != null)
+                        {
+                            this.State = availableSegment;
+                            return;
+                        }
+                    }
+
+                    maxSegment = this.DataContext.Segments.Max(s => s.MaxNum);
                 }
+
+                var newSegment =
+                    await this.DataContext.Segments.AddAsync(Segment.AddNewSegment((int)productId, maxSegment));
+                await this.DataContext.SaveChangesAsync();
+                this.State = newSegment.Entity;
             }
         }
 
@@ -62,6 +79,8 @@ namespace Ignite2019.IoT.Orleans.Grains
         {
             await this.WriteStateAsync();
             this.DataContext.Segments.Update(this.State);
+
+            await this.DataContext.SaveChangesAsync();
             await base.OnDeactivateAsync();
         }
     }

@@ -27,8 +27,8 @@ namespace Ignite2019.IoT.Orleans.Model
             {
                 ProductId = productId,
                 InitialNum = initialNum,
-                MaxNum = initialNum + 0x1000,
-                Remain = 0x1000
+                MaxNum = initialNum + 0x10000,
+                Remain = 0x10000
             };
         }
     }

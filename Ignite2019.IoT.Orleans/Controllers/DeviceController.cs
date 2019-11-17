@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.Grains;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
 using WalkingTec.Mvvm.Core.Extensions;
 using Ignite2019.IoT.Orleans.ViewModel.DeviceVMs;
+using Orleans;
 
 namespace Ignite2019.IoT.Orleans.Controllers
 {
@@ -12,6 +15,12 @@ namespace Ignite2019.IoT.Orleans.Controllers
     [ActionDescription("设备管理")]
     public partial class DeviceController : BaseController
     {
+        private readonly IClusterClient _client;
+
+        public DeviceController(IClusterClient client)
+        {
+            _client = client;
+        }
         #region 搜索
         [ActionDescription("搜索")]
         public ActionResult Index()
@@ -36,17 +45,23 @@ namespace Ignite2019.IoT.Orleans.Controllers
             var vm = CreateVM<DeviceVM>();
             return PartialView(vm);
         }
-
+        
         [HttpPost]
         [ActionDescription("新建")]
-        public ActionResult Create(DeviceVM vm)
+        public async Task<ActionResult> Create(DeviceVM vm)
         {
+            var uniqueIdGenerator = _client.GetGrain<IUniqueIdGenerator>(vm.Entity.ProductId);
+
+            var newId =await uniqueIdGenerator.NewId();
+            vm.Entity.ID = newId;
+            
             if (!ModelState.IsValid)
             {
                 return PartialView(vm);
             }
             else
             {
+                
                 vm.DoAdd();
                 if (!ModelState.IsValid)
                 {

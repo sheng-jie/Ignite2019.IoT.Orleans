@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.Grains;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -33,6 +34,7 @@ namespace Ignite2019.IoT.Orleans
                     option.TableName = "Cluster";
                     option.ConnectionString = clusterConnStr;
                 })
+                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IUniqueIdGenerator).Assembly))
                 .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
                 .Build();
         }
