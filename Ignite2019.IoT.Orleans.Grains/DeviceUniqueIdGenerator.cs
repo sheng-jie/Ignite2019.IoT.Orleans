@@ -34,7 +34,7 @@ namespace Ignite2019.IoT.Orleans.Grains
                 this.State.Remain--;
             }
 
-            await this.WriteStateAsync();
+            //await this.WriteStateAsync();
 
             var newId = $"{newNum:X16}";
 
@@ -43,10 +43,10 @@ namespace Ignite2019.IoT.Orleans.Grains
 
         private async Task LoadSegment()
         {
-            var productId = this.GetPrimaryKeyLong();
             // get assigned segments of product.
             if (!this.State.HasRemain)
             {
+                var productId = this.GetPrimaryKeyLong();
                 ulong maxSegment = 0;
                 var hasSegments = this.DataContext.Set<Segment>().Any();
 

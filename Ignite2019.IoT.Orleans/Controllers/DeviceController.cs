@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Grains;
+using Ignite2019.IoT.Orleans.Model;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
 using WalkingTec.Mvvm.Core.Extensions;
@@ -11,7 +15,7 @@ using Orleans;
 
 namespace Ignite2019.IoT.Orleans.Controllers
 {
-    
+
     [ActionDescription("设备管理")]
     public partial class DeviceController : BaseController
     {
@@ -21,6 +25,46 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             _client = client;
         }
+
+        [ActionDescription("模拟批量创建")]
+        public async Task<ActionResult> MockBatchCreate()
+        {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+            var productIds = this.DC.Set<Product>().Select(p => p.ID).ToList();
+            var random = new Random();
+            var devices = Enumerable.Range(0, 1000)
+                .Select(i =>
+                {
+                    var index = random.Next(productIds.Count());
+                    var productId = productIds[index];
+                    var deviceVm = new Device();
+                    deviceVm.ProductId = productId;
+                    return deviceVm;
+                }).ToList();
+
+            var tasks = devices.Select(async d =>
+            {
+                var uniqueIdGenerator = _client.GetGrain<IUniqueIdGenerator>(d.ProductId);
+
+                var newId = await uniqueIdGenerator.NewId();
+                d.ID = newId;
+                return d;
+            });
+
+
+            var newDevices = await Task.WhenAll(tasks);
+
+            var duplicatedIds = newDevices.Select(d => d.ID).Distinct().Count();
+
+            await this.DC.Set<Device>().AddRangeAsync(newDevices);
+
+            var result = await this.DC.SaveChangesAsync();
+
+            watch.Stop();
+            return FFResult().Alert($"成功创建{ result}个设备，耗时{watch.Elapsed.Seconds}");
+        }
+
         #region 搜索
         [ActionDescription("搜索")]
         public ActionResult Index()
@@ -45,23 +89,23 @@ namespace Ignite2019.IoT.Orleans.Controllers
             var vm = CreateVM<DeviceVM>();
             return PartialView(vm);
         }
-        
+
         [HttpPost]
         [ActionDescription("新建")]
         public async Task<ActionResult> Create(DeviceVM vm)
         {
             var uniqueIdGenerator = _client.GetGrain<IUniqueIdGenerator>(vm.Entity.ProductId);
 
-            var newId =await uniqueIdGenerator.NewId();
+            var newId = await uniqueIdGenerator.NewId();
             vm.Entity.ID = newId;
-            
+
             if (!ModelState.IsValid)
             {
                 return PartialView(vm);
             }
             else
             {
-                
+
                 vm.DoAdd();
                 if (!ModelState.IsValid)
                 {
@@ -158,11 +202,11 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             if (!ModelState.IsValid || !vm.DoBatchEdit())
             {
-                return PartialView("BatchEdit",vm);
+                return PartialView("BatchEdit", vm);
             }
             else
             {
-                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有"+vm.Ids.Length+"条数据被修改");
+                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有" + vm.Ids.Length + "条数据被修改");
             }
         }
         #endregion
@@ -182,17 +226,17 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             if (!ModelState.IsValid || !vm.DoBatchDelete())
             {
-                return PartialView("BatchDelete",vm);
+                return PartialView("BatchDelete", vm);
             }
             else
             {
-                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有"+vm.Ids.Length+"条数据被删除");
+                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有" + vm.Ids.Length + "条数据被删除");
             }
         }
         #endregion
 
         #region 导入
-		[ActionDescription("导入")]
+        [ActionDescription("导入")]
         public ActionResult Import()
         {
             var vm = CreateVM<DeviceImportVM>();

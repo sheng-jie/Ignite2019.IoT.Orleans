@@ -26,9 +26,9 @@ namespace Ignite2019.IoT.Orleans.ViewModel.DeviceVMs
 
         public override void DoAdd()
         {
-            this.Entity.Name = string.IsNullOrEmpty(this.Entity.Name)
-                ? this.DC.Set<Product>().FirstOrDefault(p => p.ID == this.Entity.ProductId)?.Name
-            : this.Entity.Name;
+            //this.Entity.Name = string.IsNullOrEmpty(this.Entity.Name)
+            //    ? this.DC.Set<Product>().FirstOrDefault(p => p.ID == this.Entity.ProductId)?.Name
+            //: this.Entity.Name;
             base.DoAdd();
         }
 
