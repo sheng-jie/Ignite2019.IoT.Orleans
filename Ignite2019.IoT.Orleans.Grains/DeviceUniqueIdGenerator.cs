@@ -10,11 +10,11 @@ namespace Ignite2019.IoT.Orleans.Grains
 {
     public class DeviceUniqueIdGenerator : Grain<Segment>, IUniqueIdGenerator
     {
-        public DbContext DataContext { get; set; }
+        public DataContext DataContext { get; set; }
         public DeviceUniqueIdGenerator(DbContext context)
         {
-            this.DataContext = context;
-            //this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
+            //this.DataContext = context;
+            this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
         }
 
         public override async Task OnActivateAsync()

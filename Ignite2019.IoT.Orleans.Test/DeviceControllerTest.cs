@@ -21,7 +21,7 @@ namespace Ignite2019.IoT.Orleans.Test
         public DeviceControllerTest()
         {
             _seed = Guid.NewGuid().ToString();
-            _controller = MockController.CreateController<DeviceController>(_seed, "user");
+            //_controller = MockController.CreateController<DeviceController>(_seed, "user");
         }
 
         [TestMethod]
@@ -176,7 +176,7 @@ namespace Ignite2019.IoT.Orleans.Test
 
                 v.ID = 83;
                 v.Name = "UPZo";
-                v.CompanyId = $fk$;
+                v.CompanyId = 1;
                 context.Set<Product>().Add(v);
                 context.SaveChanges();
             }
