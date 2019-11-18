@@ -26,6 +26,15 @@ namespace Ignite2019.IoT.Orleans.Controllers
             _client = client;
         }
 
+        private Task TryToAddBatchDevices()
+        {
+            var loopResult =Parallel.For(0, 1000, (i, state) => { });
+
+            
+
+            return Task.CompletedTask;
+        }
+
         [ActionDescription("模拟批量创建")]
         public async Task<ActionResult> MockBatchCreate()
         {
@@ -33,6 +42,8 @@ namespace Ignite2019.IoT.Orleans.Controllers
             watch.Start();
             var productIds = this.DC.Set<Product>().Select(p => p.ID).ToList();
             var random = new Random();
+
+            
             var devices = Enumerable.Range(0, 1000)
                 .Select(i =>
                 {

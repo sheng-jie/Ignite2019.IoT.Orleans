@@ -44,7 +44,8 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                     {
                         options.ClusterId = "Ignite.IoT.Orleans";
                         options.ServiceId = "Ignite.IoT.Orleans";
-                    });
+                    })
+                    .Configure<ProcessExitHandlingOptions>(options => options.FastKillOnProcessExit = false);
 
                 builder.AddAzureTableGrainStorageAsDefault(options =>
                 {
