@@ -69,6 +69,10 @@ namespace Ignite2019.IoT.Orleans.Controllers
                     };
                 }
 
+                var principal = user.CreatePrincipal();
+                // 在上面注册AddAuthentication时，指定了默认的Scheme，在这里便可以不再指定Scheme。
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
+
                 return Redirect(HttpUtility.UrlDecode(url));
             }
         }
@@ -78,6 +82,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
         public async Task Logout()
         {
             HttpContext.Session.Clear();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Response.Redirect("/");
         }
 

@@ -13,8 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="3.0.0" />
-    <PackageReference Include="WalkingTec.Mvvm.TagHelpers.LayUI" Version="3.0.0-rc8" />
-    <PackageReference Include="WalkingTec.Mvvm.Mvc.Admin" Version="3.0.0-rc8" />
+    <PackageReference Include="WalkingTec.Mvvm.TagHelpers.LayUI" Version="3.0.2" />
+    <PackageReference Include="WalkingTec.Mvvm.Mvc.Admin" Version="3.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
     <PackageReference Include="Microsoft.Orleans.Clustering.AzureStorage" Version="3.0.0" />
     <PackageReference Include="Microsoft.Orleans.Client" Version="3.0.0" />
