@@ -35,7 +35,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
             return Task.CompletedTask;
         }
 
-        [ActionDescription("模拟批量创建")]
+        [ActionDescription("模拟并发创建")]
         public async Task<ActionResult> MockBatchCreate()
         {
             Stopwatch watch = new Stopwatch();
@@ -44,7 +44,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
             var random = new Random();
 
             
-            var devices = Enumerable.Range(0, 1000)
+            var devices = Enumerable.Range(0, 100000)
                 .Select(i =>
                 {
                     var index = random.Next(productIds.Count());
@@ -73,7 +73,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
             var result = await this.DC.SaveChangesAsync();
 
             watch.Stop();
-            return FFResult().Alert($"成功创建{ result}个设备，耗时{watch.Elapsed.Seconds}");
+            return FFResult().Alert($"成功创建{ result}个设备，耗时{watch.Elapsed.Seconds}s");
         }
 
         #region 搜索
