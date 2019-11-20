@@ -27,10 +27,15 @@ namespace Ignite2019.IoT.Orleans.Grains
             this.RegisterTimer(async o =>
             {
                 await this.WriteStateAsync();
-                //this.DataContext.Set<Segment>().Attach(this.State);
 
-                await this.DataContext.SaveChangesAsync();
-            }, null, TimeSpan.FromSeconds(5), TimeSpan.FromMinutes(1));
+            }, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
+        }
+
+        protected override async Task WriteStateAsync()
+        {
+            await base.WriteStateAsync();
+            this.DataContext.Attach(this.State);
+            var result = await this.DataContext.SaveChangesAsync();
         }
 
         public async Task<string> NewId()
@@ -68,11 +73,6 @@ namespace Ignite2019.IoT.Orleans.Grains
         public override async Task OnDeactivateAsync()
         {
             await this.WriteStateAsync();
-            //this.DataContext.Set<Segment>().Attach(this.State);
-
-            await this.DataContext.SaveChangesAsync();
-
-            await this.DataContext.SaveChangesAsync();
             await base.OnDeactivateAsync();
         }
     }
