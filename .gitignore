@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/.idea/.idea.Ignite2019.IoT.Orleans/.idea
+/.idea/.idea.Ignite2019.IoT.Orleans
