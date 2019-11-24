@@ -15,7 +15,7 @@ namespace Ignite2019.IoT.Orleans.Model
         public ulong Remain { get; set; }
 
         [Display(Name = "产品")]
-        public int ProductId { get; set; }
+        public int ProductId { get;  set; }
         [Display(Name = "产品")]
         public Product Product { get; set; }
 

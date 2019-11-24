@@ -44,7 +44,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
             var random = new Random();
 
             
-            var devices = Enumerable.Range(0, 100000)
+            var devices = Enumerable.Range(0, 10000)
                 .Select(i =>
                 {
                     var index = random.Next(productIds.Count());
