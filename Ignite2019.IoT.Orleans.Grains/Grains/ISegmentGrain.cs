@@ -1,11 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Ignite2019.IoT.Orleans.Model;
 using Orleans;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
-    public interface ISegmentGrain : IGrainWithGuidKey
+    public interface ISegmentGrain : IGrainWithIntegerKey
     {
-        Task<Segment> GetAvailableSegmentAsync(int productId);
+        /// <summary>
+        /// 在当前段号下申请新的的设备ID
+        /// </summary>
+        /// <returns></returns>
+        Task<string> NewDeviceIdAsync();
     }
 }
