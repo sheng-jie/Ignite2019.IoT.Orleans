@@ -12,8 +12,22 @@ namespace Ignite2019.IoT.Orleans.Grains
     {
         public Task HandleEvent(DeviceEvent deviceEvent)
         {
-            var evnt = deviceEvent as OnlineEvent;
-            this.RaiseEvent(evnt);
+            switch (deviceEvent)
+            {
+                case OnlineEvent newEvent:
+                    this.RaiseEvent(newEvent);
+                    break;
+                case OfflineEvent newEvent:
+                    this.RaiseEvent(newEvent);
+                    break;
+                case ReportEvent newEvent:
+                    this.RaiseEvent(newEvent);
+                    break;
+                case ControlEvent newEvent:
+                    this.RaiseEvent(newEvent);
+                    break;
+
+            }
 
             return ConfirmEvents();
         }

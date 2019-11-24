@@ -35,7 +35,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
 
             var grain = _client.GetGrain<IDeviceGrain>(deviceId);
 
-            await grain.HandleEvent(onlineEvent);
+            await grain.HandleEvent((DeviceEvent)onlineEvent);
         }
 
         [ActionDescription("状态模拟")]
@@ -47,14 +47,14 @@ namespace Ignite2019.IoT.Orleans.Controllers
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(10000).ToList();
+            var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(100).ToList();
 
-            var events = new List<OnlineEvent>()
+            var events = new List<DeviceEvent>()
             {
                 new OnlineEvent(),
-                //new OfflineEvent(),
-                //new ReportEvent("something is going wrong!"),
-                //new ControlEvent(new ControlCommand("open")),
+                new OfflineEvent(),
+                new ReportEvent("something is going wrong!"),
+                new ControlEvent(new ControlCommand("open")),
             };
 
             var deviceEvents = deviceIds.SelectMany(d => events, (deviceId, evet) =>
