@@ -1,17 +1,82 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.Events;
+using Ignite2019.IoT.Orleans.Grains;
+using Ignite2019.IoT.Orleans.Model;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
 using WalkingTec.Mvvm.Core.Extensions;
 using Ignite2019.IoT.Orleans.ViewModel.EventHistoryVMs;
+using Orleans;
 
 namespace Ignite2019.IoT.Orleans.Controllers
 {
-    
+
     [ActionDescription("设备日志")]
     public partial class EventHistoryController : BaseController
     {
+        private readonly IClusterClient _client;
+
+        public EventHistoryController(IClusterClient client)
+        {
+            _client = client;
+        }
+
+        private async Task MockOnline()
+        {
+            var deviceId = this.DC.Set<Device>().FirstOrDefault().ID;
+
+            var onlineEvent =new OnlineEvent();
+
+            var grain = _client.GetGrain<IDeviceGrain>(deviceId);
+
+            await grain.HandleEvent(onlineEvent);
+        }
+
+        [ActionDescription("状态模拟")]
+        public async Task<ActionResult> MockDeviceEvent()
+        {
+
+            await MockOnline();
+            return FFResult().Alert("finish");
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
+
+            var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(10000).ToList();
+
+            var events = new List<OnlineEvent>()
+            {
+                new OnlineEvent(),
+                //new OfflineEvent(),
+                //new ReportEvent("something is going wrong!"),
+                //new ControlEvent(new ControlCommand("open")),
+            };
+
+            var deviceEvents = deviceIds.SelectMany(d => events, (deviceId, evet) =>
+            {
+                evet.DeviceId = deviceId;
+                return evet;
+            }).ToList();
+
+            var evntHandleTasks = deviceEvents.Select(async de =>
+              {
+                  var deviceGrain = _client.GetGrain<IDeviceGrain>(de.DeviceId);
+
+                  await deviceGrain.HandleEvent(de);
+              });
+
+            await Task.WhenAll(evntHandleTasks);
+
+            watch.Stop();
+            return FFResult().Alert($"成功模拟{deviceEvents.Count()}个事件，耗时{watch.Elapsed.Seconds}s");
+
+        }
+
         #region 搜索
         [ActionDescription("搜索")]
         public ActionResult Index()
@@ -143,11 +208,11 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             if (!ModelState.IsValid || !vm.DoBatchEdit())
             {
-                return PartialView("BatchEdit",vm);
+                return PartialView("BatchEdit", vm);
             }
             else
             {
-                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有"+vm.Ids.Length+"条数据被修改");
+                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有" + vm.Ids.Length + "条数据被修改");
             }
         }
         #endregion
@@ -167,17 +232,17 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             if (!ModelState.IsValid || !vm.DoBatchDelete())
             {
-                return PartialView("BatchDelete",vm);
+                return PartialView("BatchDelete", vm);
             }
             else
             {
-                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有"+vm.Ids.Length+"条数据被删除");
+                return FFResult().CloseDialog().RefreshGrid().Alert("操作成功，共有" + vm.Ids.Length + "条数据被删除");
             }
         }
         #endregion
 
         #region 导入
-		[ActionDescription("导入")]
+        [ActionDescription("导入")]
         public ActionResult Import()
         {
             var vm = CreateVM<EventHistoryImportVM>();

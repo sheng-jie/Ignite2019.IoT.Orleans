@@ -1,8 +1,14 @@
-﻿namespace Ignite2019.IoT.Orleans.Events
+﻿using Ignite2019.IoT.Orleans.Model;
+
+namespace Ignite2019.IoT.Orleans.Events
 {
     public class ControlEvent : DeviceEvent
     {
-        public string Command { get; set; }
+        public ControlEvent(ControlCommand command)
+        {
+            this.Command = command;
+        }
+        public ControlCommand Command { get; set; }
 
         public int? UserId { get; set; }
     }

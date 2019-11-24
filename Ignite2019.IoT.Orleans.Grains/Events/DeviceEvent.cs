@@ -7,7 +7,7 @@ namespace Ignite2019.IoT.Orleans.Events
     {
         public string DeviceId { get; set; }
 
-        public DateTime EventTime { get; set; }
+        public DateTime EventTime => DateTime.Now;
 
         public EventHistory ToEventHistory()
         {

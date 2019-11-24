@@ -50,8 +50,9 @@ namespace Ignite2019.IoT.Orleans.States
 
             var eventHistory = controlEvent.ToEventHistory();
             eventHistory.EventType = EventType.Control;
-            eventHistory.Detail = controlEvent.Command;
+            eventHistory.Detail = controlEvent.Command.CommandBody;
             eventHistory.UserId = controlEvent.UserId;
+
             this.AddEventHistory(eventHistory);
 
             return this;

@@ -19,6 +19,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.EventHistoryVMs
             {
                 //this.MakeStandardAction("EventHistory", GridActionStandardTypesEnum.Create, "新建","", dialogWidth: 800),
                 //this.MakeStandardAction("EventHistory", GridActionStandardTypesEnum.Edit, "修改","", dialogWidth: 800),
+                this.MakeAction("EventHistory", "MockDeviceEvent", "状态变更模拟","模拟状态变更",GridActionParameterTypesEnum.NoId),
                 this.MakeStandardAction("EventHistory", GridActionStandardTypesEnum.Delete, "删除", "",dialogWidth: 800),
                 this.MakeStandardAction("EventHistory", GridActionStandardTypesEnum.Details, "详细","", dialogWidth: 800),
                 //this.MakeStandardAction("EventHistory", GridActionStandardTypesEnum.BatchEdit, "批量修改","", dialogWidth: 800),
