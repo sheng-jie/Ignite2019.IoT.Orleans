@@ -1,4 +1,4 @@
-﻿namespace Ignite2019.IoT.Orleans.Grains.EventSource
+﻿namespace Ignite2019.IoT.Orleans.Events
 {
     public class OnlineEvent : DeviceEvent
     {

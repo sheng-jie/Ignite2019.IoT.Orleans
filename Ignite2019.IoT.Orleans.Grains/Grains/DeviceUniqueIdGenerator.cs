@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.DataAccess;
-using Ignite2019.IoT.Orleans.Grains.State;
 using Ignite2019.IoT.Orleans.Model;
 using Microsoft.EntityFrameworkCore;
 using Orleans;

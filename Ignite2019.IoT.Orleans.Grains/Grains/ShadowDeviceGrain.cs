@@ -1,10 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Model;
+using Ignite2019.IoT.Orleans.States;
 using Orleans;
 using WalkingTec.Mvvm.Core;
 
-namespace Ignite2019.IoT.Orleans.Grains.State
+namespace Ignite2019.IoT.Orleans.Grains
 {
     public class ShadowDeviceGrain : Grain<ShadowDevice>, IShadowDeviceGrain
     {
@@ -48,18 +49,6 @@ namespace Ignite2019.IoT.Orleans.Grains.State
         public Task<ShadowDevice> GetShadowDevice()
         {
             return Task.FromResult(this.State);
-        }
-
-        public Task AddEventHistory(EventHistory newHistory)
-        {
-            this.State.EventHistories.Add(newHistory);
-            return Task.CompletedTask;
-        }
-
-        public Task UpdateStatus(bool isOnline)
-        {
-            this.State.IsOnline = isOnline;
-            return Task.CompletedTask;
         }
     }
 }

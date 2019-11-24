@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Ignite2019.IoT.Orleans</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +11,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.EventSourcing" Version="3.0.0" />
     <PackageReference Include="Microsoft.Orleans.Runtime.Abstractions" Version="3.0.0" />
   </ItemGroup>
 
@@ -18,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Reminder\" />
-    <Folder Include="Stream\" />
+    <Folder Include="Reminders\" />
+    <Folder Include="Streams\" />
   </ItemGroup>
 
 </Project>

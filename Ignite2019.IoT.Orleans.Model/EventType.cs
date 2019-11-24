@@ -2,11 +2,9 @@
 {
     public enum EventType
     {
-        UnlockRequest,
-        Unlock,
-        Lock,
         Online,
         Offline,
-        Alarm
+        Report,
+        Control,
     }
 }

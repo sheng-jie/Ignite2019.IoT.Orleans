@@ -1,17 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.DataAccess;
 using Ignite2019.IoT.Orleans.Model;
 using Orleans;
-using System.Linq;
 using WalkingTec.Mvvm.Core;
 
-namespace Ignite2019.IoT.Orleans.Grains.State
+namespace Ignite2019.IoT.Orleans.Grains
 {
-    public interface ISegmentGrain : IGrainWithGuidKey
-    {
-        Task<Segment> GetAvailableSegmentAsync(int productId);
-    }
-
     public class SegmentGrain : Grain, ISegmentGrain
     {
         public DataContext DataContext { get; set; }
