@@ -20,10 +20,37 @@ namespace Ignite2019.IoT.Orleans
             ILogger<ClusterClientHostedService> logger,
             ILoggerProvider loggerProvider)
         {
-            var clusterConnStr = configuration.GetValue<string>("AppSettings:orleans_azure_table");
+            var clusterConnStr = configuration.GetValue<string>("AppSettings:orleans_sql_server");
             _logger = logger;
 
-            Client = new ClientBuilder()
+            var clientBuilder = UseSqlServerOrleansClient(clusterConnStr);
+            //var clientBuilder = UseAzureOrleansClient(clusterConnStr);
+
+            this.Client = clientBuilder.ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IUniqueIdGenerator).Assembly))
+                .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
+                .Build();
+        }
+
+
+
+        private IClientBuilder UseSqlServerOrleansClient(string clusterConnStr)
+        {
+            return new ClientBuilder()
+                .Configure<ClusterOptions>(options =>
+                {
+                    options.ClusterId = "Ignite.IoT.Orleans";
+                    options.ServiceId = "Ignite.IoT.Orleans";
+                })
+                .UseAdoNetClustering(option =>
+                {
+                    option.Invariant = "System.Data.SqlClient";
+                    option.ConnectionString = clusterConnStr;
+                });
+        }
+
+        private IClientBuilder UseAzureOrleansClient(string clusterConnStr)
+        {
+            return new ClientBuilder()
                 .Configure<ClusterOptions>(options =>
                 {
                     options.ClusterId = "Ignite.IoT.Orleans";
@@ -33,10 +60,7 @@ namespace Ignite2019.IoT.Orleans
                 {
                     option.TableName = "Cluster";
                     option.ConnectionString = clusterConnStr;
-                })
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IUniqueIdGenerator).Assembly))
-                .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
-                .Build();
+                });
         }
 
         public Task StartAsync(CancellationToken cancellationToken)

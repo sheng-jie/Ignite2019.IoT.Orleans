@@ -28,7 +28,86 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                 configurationBuilder.AddJsonFile("appsettings.json");
             });
 
+            UseOrleansWithSqlServer(hostBuilder);
 
+            //UseOrleansWithAzureTable(hostBuilder);
+
+            return hostBuilder.Build().StartAsync();
+        }
+
+        private static void UseOrleansWithSqlServer(HostBuilder hostBuilder)
+        {
+            hostBuilder.UseOrleans((context, builder) =>
+            {
+                Configs con = context.Configuration.Get<Configs>() ?? new Configs();
+
+                var invariant = "System.Data.SqlClient";
+                var azureTableConStr = con.ConnectionStrings.FirstOrDefault(cs => cs.Key == "orleans_sql_server")?.Value;
+
+                builder.UseAdoNetClustering(options =>
+                    {
+                        options.Invariant = invariant;
+                        options.ConnectionString = azureTableConStr;
+                    }).ConfigureEndpoints(siloPort: 11111, gatewayPort: 30000)
+                    .Configure<ClusterOptions>(options =>
+                    {
+                        options.ClusterId = "Ignite.IoT.Orleans";
+                        options.ServiceId = "Ignite.IoT.Orleans";
+                    })
+                    .Configure<ProcessExitHandlingOptions>(options => options.FastKillOnProcessExit = false)
+                    .ConfigureLogging(loggingBuilder =>
+                    {
+                        loggingBuilder.AddConsole();
+                        loggingBuilder.SetMinimumLevel(LogLevel.Warning);
+                    });
+
+                builder.AddAdoNetGrainStorageAsDefault(options =>
+                {
+                    options.Invariant = invariant;
+                    options.UseJsonFormat = true;
+                    options.ConnectionString = azureTableConStr;
+                });
+
+                builder.UseAdoNetReminderService(configure =>
+                {
+                    configure.ConnectionString = azureTableConStr;
+                    configure.Invariant = invariant;
+                });
+
+                builder.ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole());
+
+
+                builder.ConfigureApplicationParts(parts => parts.AddFromApplicationBaseDirectory().WithReferences());
+
+                builder.UseDashboard(options =>
+                {
+                    options.Host = "*";
+                    options.Port = 8080;
+                    options.HostSelf = true;
+                    options.CounterUpdateIntervalMs = 10000;
+                });
+
+                var sqlServerConnStr = con.ConnectionStrings.FirstOrDefault(cs => cs.Key == "default")?.Value;
+
+                builder.ConfigureServices(services =>
+                {
+                    services.AddSingleton<Configs>(con);
+                    services.AddDbContextPool<DbContext>(optionsBuilder =>
+                        optionsBuilder.UseSqlServer(sqlServerConnStr)
+                    );
+
+                    //services.AddDbContext<DataContext>(
+                    //    optionsBuilder =>
+                    //    {
+                    //        optionsBuilder.UseSqlServer(sqlServerConnStr);
+                    //    });
+                    GlobalServices.SetServiceProvider(services.BuildServiceProvider());
+                });
+            });
+        }
+
+        private static void UseOrleansWithAzureTable(HostBuilder hostBuilder)
+        {
             hostBuilder.UseOrleans((context, builder) =>
             {
                 Configs con = context.Configuration.Get<Configs>() ?? new Configs();
@@ -84,7 +163,7 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                 {
                     services.AddSingleton<Configs>(con);
                     services.AddDbContextPool<DbContext>(optionsBuilder =>
-                             optionsBuilder.UseSqlServer(sqlServerConnStr)
+                        optionsBuilder.UseSqlServer(sqlServerConnStr)
                     );
 
                     //services.AddDbContext<DataContext>(
@@ -95,9 +174,6 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                     GlobalServices.SetServiceProvider(services.BuildServiceProvider());
                 });
             });
-
-
-            return hostBuilder.Build().StartAsync();
         }
     }
 }

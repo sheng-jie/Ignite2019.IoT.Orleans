@@ -22,6 +22,11 @@
     <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" Version="3.0.0" />
     <PackageReference Include="Microsoft.Orleans.Reminders.AzureStorage" Version="3.0.0" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="3.0.0" />
+
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
     <PackageReference Include="OrleansDashboard" Version="3.0.4" />
   </ItemGroup>
 
