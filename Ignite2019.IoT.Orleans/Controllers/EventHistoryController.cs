@@ -27,23 +27,9 @@ namespace Ignite2019.IoT.Orleans.Controllers
             _client = client;
         }
 
-        private async Task MockOnline()
-        {
-            var deviceId = this.DC.Set<Device>().FirstOrDefault().ID;
-
-            var onlineEvent =new OnlineEvent();
-
-            var grain = _client.GetGrain<IDeviceGrain>(deviceId);
-
-            await grain.HandleEvent((DeviceEvent)onlineEvent);
-        }
-
         [ActionDescription("状态模拟")]
-        public async Task<ActionResult> MockDeviceEvent()
+        public ActionResult MockDeviceEvent()
         {
-
-            await MockOnline();
-            return FFResult().Alert("finish");
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
@@ -59,21 +45,22 @@ namespace Ignite2019.IoT.Orleans.Controllers
 
             var deviceEvents = deviceIds.SelectMany(d => events, (deviceId, evet) =>
             {
-                evet.DeviceId = deviceId;
-                return evet;
+                var newEvent = evet.Clone() as DeviceEvent;
+                newEvent.DeviceId = deviceId;
+                return newEvent;
             }).ToList();
 
-            var evntHandleTasks = deviceEvents.Select(async de =>
-              {
-                  var deviceGrain = _client.GetGrain<IDeviceGrain>(de.DeviceId);
+            var tasks = Parallel.ForEach(deviceEvents, async de =>
+             {
+                 var deviceGrain = _client.GetGrain<IDeviceGrain>(de.DeviceId);
 
-                  await deviceGrain.HandleEvent(de);
-              });
+                 await deviceGrain.HandleEvent(de);
+             });
 
-            await Task.WhenAll(evntHandleTasks);
+            //await Task.WhenAll(evntHandleTasks);
 
             watch.Stop();
-            return FFResult().Alert($"成功模拟{deviceEvents.Count()}个事件，耗时{watch.Elapsed.Seconds}s");
+            return FFResult().Alert($"成功模拟{deviceEvents.Count()}个事件");
 
         }
 

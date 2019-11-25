@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Ignite2019.IoT.Orleans.Events;
 using Ignite2019.IoT.Orleans.Model;
 
@@ -23,6 +24,8 @@ namespace Ignite2019.IoT.Orleans.States
             this.IsOnline = true;
             this.AddEventHistory(eventHistory);
 
+            Console.WriteLine($"{onlineEvent.DeviceId} is online at {onlineEvent.EventTime}");
+
             return this;
         }
 
@@ -32,6 +35,9 @@ namespace Ignite2019.IoT.Orleans.States
             eventHistory.EventType = EventType.Offline;
             this.IsOnline = false;
             this.AddEventHistory(eventHistory);
+
+            Console.WriteLine($"{offlineEvent.DeviceId} is offline at {offlineEvent.EventTime}");
+
             return this;
         }
 
@@ -41,6 +47,8 @@ namespace Ignite2019.IoT.Orleans.States
             eventHistory.EventType = EventType.Report;
             eventHistory.Detail = reportEvent.Data;
             this.AddEventHistory(eventHistory);
+
+            Console.WriteLine($"{reportEvent.DeviceId} reports data {reportEvent.Data} at {reportEvent.EventTime}");
 
             return this;
         }
@@ -54,6 +62,8 @@ namespace Ignite2019.IoT.Orleans.States
             eventHistory.UserId = controlEvent.UserId;
 
             this.AddEventHistory(eventHistory);
+
+            Console.WriteLine($"{controlEvent.DeviceId} sends a [{controlEvent.Command.CommandBody}] command  at {controlEvent.EventTime}");
 
             return this;
         }

@@ -8,7 +8,7 @@ using Orleans.EventSourcing;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
-    public class DeviceGrain : JournaledGrain<ShadowDevice>, IDeviceGrain
+    public class DeviceGrain : JournaledGrain<ShadowDevice,DeviceEvent>, IDeviceGrain
     {
         public Task HandleEvent(DeviceEvent deviceEvent)
         {
