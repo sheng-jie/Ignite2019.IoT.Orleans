@@ -7,6 +7,7 @@ using WalkingTec.Mvvm.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using Ignite2019.IoT.Orleans.Model;
+using Orleans;
 
 
 namespace Ignite2019.IoT.Orleans.ViewModel.EventHistoryVMs

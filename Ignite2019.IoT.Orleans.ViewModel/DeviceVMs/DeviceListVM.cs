@@ -17,8 +17,10 @@ namespace Ignite2019.IoT.Orleans.ViewModel.DeviceVMs
         {
             return new List<GridAction>
             {
-                
+
                 this.MakeAction("Device","MockBatchCreate","模拟批量创建","模拟批量创建",GridActionParameterTypesEnum.NoId),
+
+                this.MakeAction("EventHistory","Logs","设备日志","设备日志列表",GridActionParameterTypesEnum.SingleId),
                 this.MakeStandardAction("Device", GridActionStandardTypesEnum.Create, "新建","", dialogWidth: 800),
                 this.MakeStandardAction("Device", GridActionStandardTypesEnum.Edit, "修改","", dialogWidth: 800),
                 this.MakeStandardAction("Device", GridActionStandardTypesEnum.Delete, "删除", "",dialogWidth: 800),
@@ -45,14 +47,14 @@ namespace Ignite2019.IoT.Orleans.ViewModel.DeviceVMs
         public override IOrderedQueryable<Device_View> GetSearchQuery()
         {
             var query = DC.Set<Device>()
-                .CheckContain(Searcher.ID, x=>x.ID)
-                .CheckContain(Searcher.Name, x=>x.Name)
-                .CheckContain(Searcher.Remark, x=>x.Remark)
-                .CheckEqual(Searcher.CreateTime, x=>x.CreateTime)
-                .CheckEqual(Searcher.ProductId, x=>x.ProductId)
+                .CheckContain(Searcher.ID, x => x.ID)
+                .CheckContain(Searcher.Name, x => x.Name)
+                .CheckContain(Searcher.Remark, x => x.Remark)
+                .CheckEqual(Searcher.CreateTime, x => x.CreateTime)
+                .CheckEqual(Searcher.ProductId, x => x.ProductId)
                 .Select(x => new Device_View
                 {
-				    ID = x.ID,
+                    ID = x.ID,
                     Name = x.Name,
                     Remark = x.Remark,
                     CreateTime = x.CreateTime,
@@ -64,7 +66,8 @@ namespace Ignite2019.IoT.Orleans.ViewModel.DeviceVMs
 
     }
 
-    public class Device_View : Device{
+    public class Device_View : Device
+    {
         [Display(Name = "产品名称")]
         public String Name_view { get; set; }
 

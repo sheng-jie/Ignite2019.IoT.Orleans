@@ -31,5 +31,11 @@ namespace Ignite2019.IoT.Orleans.Grains
 
             return ConfirmEvents();
         }
+
+
+        public Task<ShadowDevice> GetShadowDeviceAsync()
+        {
+            return Task.FromResult(this.State);
+        }
     }
 }

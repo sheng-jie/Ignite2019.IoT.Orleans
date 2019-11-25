@@ -27,13 +27,27 @@ namespace Ignite2019.IoT.Orleans.Controllers
             _client = client;
         }
 
+        [ActionDescription("设备日志")]
+        public async Task<ActionResult> Logs(string id)
+        {
+            var vm = CreateVM<EventHistoryListVM>();
+            vm.Searcher.DeviceId = id;
+
+            var deviceGrain = _client.GetGrain<IDeviceGrain>(id);
+
+            var shadowDevice =await deviceGrain.GetShadowDeviceAsync();
+
+            vm.EntityList = shadowDevice.EventHistories.Select(eh => (EventHistory_View) eh).ToList();
+            return PartialView("Index", vm);
+        }
+
         [ActionDescription("状态模拟")]
         public ActionResult MockDeviceEvent()
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(100).ToList();
+            var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(5).ToList();
 
             var events = new List<DeviceEvent>()
             {

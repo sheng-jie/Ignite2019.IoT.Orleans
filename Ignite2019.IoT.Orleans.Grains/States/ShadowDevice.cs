@@ -13,7 +13,10 @@ namespace Ignite2019.IoT.Orleans.States
         }
 
         public Device Device { get; set; }
+
+        //[field: NonSerialized]
         public List<EventHistory> EventHistories { get; set; }
+
         public bool IsOnline { get; set; }
 
 

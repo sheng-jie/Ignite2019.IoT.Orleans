@@ -27,7 +27,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             {
                 await this.WriteStateAsync();
 
-            }, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(10));
+            }, null, TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(1));
         }
 
         public async Task<string> NewId()

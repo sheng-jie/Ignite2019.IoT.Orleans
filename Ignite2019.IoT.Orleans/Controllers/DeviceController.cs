@@ -26,13 +26,10 @@ namespace Ignite2019.IoT.Orleans.Controllers
             _client = client;
         }
 
-        private Task TryToAddBatchDevices()
+        [ActionDescription("设备日志")]
+        public async Task<ActionResult> Logs()
         {
-            var loopResult =Parallel.For(0, 1000, (i, state) => { });
-
-            
-
-            return Task.CompletedTask;
+            throw new NotImplementedException();
         }
 
         [ActionDescription("模拟并发创建")]
