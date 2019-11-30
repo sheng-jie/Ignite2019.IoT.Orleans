@@ -26,8 +26,8 @@ namespace Ignite2019.IoT.Orleans.Controllers
             _client = client;
         }
 
-        [ActionDescription("设备日志")]
-        public async Task<ActionResult> Logs()
+        [ActionDescription("模拟数据流上报")]
+        public async Task<ActionResult> MockStatusReport(string id)
         {
             throw new NotImplementedException();
         }
