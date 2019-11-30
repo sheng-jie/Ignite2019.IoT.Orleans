@@ -61,6 +61,8 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                         loggingBuilder.SetMinimumLevel(LogLevel.Warning);
                     });
 
+                builder.AddStateStorageBasedLogConsistencyProviderAsDefault();
+
                 builder.AddAdoNetGrainStorageAsDefault(options =>
                 {
                     options.Invariant = invariant;

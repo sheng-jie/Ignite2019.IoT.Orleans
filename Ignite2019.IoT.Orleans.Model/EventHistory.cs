@@ -5,6 +5,7 @@ using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Model
 {
+    [Serializable]
     public class EventHistory : TopBasePoco
     {
         [Key]

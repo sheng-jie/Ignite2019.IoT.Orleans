@@ -71,7 +71,8 @@ namespace Ignite2019.IoT.Orleans.Controllers
                  await deviceGrain.HandleEvent(de);
              });
 
-            //await Task.WhenAll(evntHandleTasks);
+            //await Task.WhenAll(tasks);
+
 
             watch.Stop();
             return FFResult().Alert($"成功模拟{deviceEvents.Count()}个事件");

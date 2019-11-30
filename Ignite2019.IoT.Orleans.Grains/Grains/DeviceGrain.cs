@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Events;
-using Ignite2019.IoT.Orleans.Model;
 using Ignite2019.IoT.Orleans.States;
-using Orleans;
 using Orleans.EventSourcing;
+using Orleans.Providers;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
@@ -29,13 +27,16 @@ namespace Ignite2019.IoT.Orleans.Grains
 
             }
 
-            return ConfirmEvents();
+            return Task.CompletedTask;
+            //return ConfirmEvents();
         }
 
 
-        public Task<ShadowDevice> GetShadowDeviceAsync()
+
+        public async Task<ShadowDevice> GetShadowDeviceAsync()
         {
-            return Task.FromResult(this.State);
+            await RefreshNow();
+            return this.State;
         }
     }
 }

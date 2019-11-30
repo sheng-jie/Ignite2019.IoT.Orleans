@@ -5,6 +5,7 @@ using Ignite2019.IoT.Orleans.Model;
 
 namespace Ignite2019.IoT.Orleans.States
 {
+    [Serializable]
     public class ShadowDevice
     {
         public ShadowDevice()
@@ -14,7 +15,6 @@ namespace Ignite2019.IoT.Orleans.States
 
         public Device Device { get; set; }
 
-        //[field: NonSerialized]
         public List<EventHistory> EventHistories { get; set; }
 
         public bool IsOnline { get; set; }
