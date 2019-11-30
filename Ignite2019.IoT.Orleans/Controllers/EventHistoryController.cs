@@ -34,10 +34,10 @@ namespace Ignite2019.IoT.Orleans.Controllers
             vm.Searcher.DeviceId = id;
 
             var deviceGrain = _client.GetGrain<IDeviceGrain>(id);
+            //[todo] cannot read state from shadow device
+            var shadowDevice = await deviceGrain.GetShadowDeviceAsync();
 
-            var shadowDevice =await deviceGrain.GetShadowDeviceAsync();
-
-            vm.EntityList = shadowDevice.EventHistories.Select(eh => (EventHistory_View) eh).ToList();
+            vm.EntityList = shadowDevice.EventHistories.Select(eh => (EventHistory_View)eh).ToList();
             return PartialView("Index", vm);
         }
 
