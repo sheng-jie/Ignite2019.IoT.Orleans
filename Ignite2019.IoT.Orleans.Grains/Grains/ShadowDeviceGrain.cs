@@ -1,54 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Events;
 using Ignite2019.IoT.Orleans.Model;
 using Ignite2019.IoT.Orleans.States;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
+using Microsoft.Extensions.Localization.Internal;
 using Orleans;
 using Orleans.EventSourcing;
+using Orleans.Runtime;
 using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
     public class ShadowDeviceGrain : JournaledGrain<ShadowDevice, DeviceEvent>, IShadowDeviceGrain
     {
-        public string DeviceId => this.GetPrimaryKeyString();
-        private readonly IDataContext _dataContext;
-
-        public ShadowDeviceGrain(IDataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
-
-        //        public override async Task OnActivateAsync()
-        //        {
-        //            await LoadShadowDevice();
-        //        }
-        //
-        //        private async Task LoadShadowDevice()
-        //        {
-        //            await this.ReadStateAsync();
-        //            if (string.IsNullOrEmpty(this.State.Device?.ID))
-        //            {
-        //                var device = _dataContext.Set<Device>().FirstOrDefault(d => d.ID == this.DeviceId);
-        //                this.State.Device = device;
-        //
-        //                var eventHistories = _dataContext.Set<EventHistory>().Where(eh => eh.DeviceId == this.DeviceId);
-        //                this.State.EventHistories = eventHistories.ToList();
-        //                await this.WriteStateAsync();
-        //            }
-        //        }
-        //
-        //
-        //        public override async Task OnDeactivateAsync()
-        //        {
-        //            await this.WriteStateAsync();
-        //
-        //            var newAddedHistories = this.State.EventHistories.Where(eh => eh.ID == 0);
-        //
-        //            await this._dataContext.Set<EventHistory>().AddRangeAsync(newAddedHistories);
-        //        }
-
-
+        private IDisposable _timer;
 
         public Task<ShadowDevice> GetShadowDevice()
         {
@@ -75,6 +42,56 @@ namespace Ignite2019.IoT.Orleans.Grains
             }
 
             return ConfirmEvents();
+        }
+
+        /// <summary>
+        /// connect to the device
+        /// </summary>
+        /// <returns></returns>
+        public async Task Login()
+        {
+            if (this.State.IsOnline)
+            {
+                await this.SendHeartbeat();
+                //注册定时器，1分钟后登出
+                _timer = this.RegisterTimer(async (state) =>
+                {
+                    if (this.State.IsOnline)
+                    {
+                        await this.Logout();
+                    }
+                }, this.State, TimeSpan.Zero, TimeSpan.FromMinutes(1));
+            }
+        }
+
+        /// <summary>
+        /// disconnect from the device
+        /// </summary>
+        /// <returns></returns>
+        public async Task Logout()
+        {
+            if (this.State.IsOnline)
+            {
+                var offlineEvent = new OfflineEvent()
+                {
+                    DeviceId = this.State.Device.ID
+                };
+                this.RaiseEvent(offlineEvent);
+                await this.ConfirmEvents();
+
+                this._timer.Dispose();// unregistered the timer;
+                this.State.IsOnline = false;
+            }
+        }
+
+        /// <summary>
+        /// send heartbeat to keep device alive
+        /// </summary>
+        /// <returns></returns>
+        private Task SendHeartbeat()
+        {
+            this.State.IsOnline = true;
+            return Task.CompletedTask;
         }
     }
 }

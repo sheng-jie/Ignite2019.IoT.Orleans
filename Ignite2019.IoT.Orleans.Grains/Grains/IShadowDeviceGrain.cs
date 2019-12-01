@@ -10,5 +10,8 @@ namespace Ignite2019.IoT.Orleans.Grains
         Task<ShadowDevice> GetShadowDevice();
 
         Task HandleEvent(DeviceEvent deviceEvent);
+
+        Task Login();
+        Task Logout();
     }
 }
