@@ -7,6 +7,7 @@ namespace Ignite2019.IoT.Orleans.Events
         public ControlEvent(ControlCommand command)
         {
             this.Command = command;
+            base.EventType = EventType.Control;
         }
         public ControlCommand Command { get; set; }
 

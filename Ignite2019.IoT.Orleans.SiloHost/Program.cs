@@ -76,6 +76,9 @@ namespace Ignite2019.IoT.Orleans.SiloHost
                     configure.Invariant = invariant;
                 });
 
+                builder.AddSimpleMessageStreamProvider("SMSProvider")
+                    .AddMemoryGrainStorage("PubSubStore");
+
                 builder.ConfigureLogging(loggingBuilder => loggingBuilder.AddConsole());
 
 

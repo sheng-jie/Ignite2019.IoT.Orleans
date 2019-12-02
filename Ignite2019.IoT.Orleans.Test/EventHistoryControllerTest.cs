@@ -21,7 +21,7 @@ namespace Ignite2019.IoT.Orleans.Test
         public EventHistoryControllerTest()
         {
             _seed = Guid.NewGuid().ToString();
-            _controller = MockController.CreateController<EventHistoryController>(_seed, "user");
+            //_controller = MockController.CreateController<EventHistoryController>(_seed, "user");
         }
 
         [TestMethod]

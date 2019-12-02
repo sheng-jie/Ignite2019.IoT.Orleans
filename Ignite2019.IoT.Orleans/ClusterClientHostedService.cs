@@ -24,6 +24,8 @@ namespace Ignite2019.IoT.Orleans
             _logger = logger;
 
             var clientBuilder = UseSqlServerOrleansClient(clusterConnStr);
+
+            clientBuilder.AddSimpleMessageStreamProvider("SMSProvider");
             //var clientBuilder = UseAzureOrleansClient(clusterConnStr);
 
             this.Client = clientBuilder.ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IUniqueIdGenerator).Assembly))

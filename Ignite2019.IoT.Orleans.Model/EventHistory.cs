@@ -30,8 +30,9 @@ namespace Ignite2019.IoT.Orleans.Model
         [Display(Name = "操作用户")]
         public User User { get; set; }
 
-        public EventHistory(string deviceId, DateTime dateTime)
+        public EventHistory(EventType eventType,string deviceId, DateTime dateTime)
         {
+            this.EventType = eventType;
             this.DeviceId = deviceId;
             this.UpdateTime = dateTime;
         }

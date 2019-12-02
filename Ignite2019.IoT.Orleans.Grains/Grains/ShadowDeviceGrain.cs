@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.Events;
-using Ignite2019.IoT.Orleans.Model;
 using Ignite2019.IoT.Orleans.States;
-using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
-using Microsoft.Extensions.Localization.Internal;
-using Orleans;
 using Orleans.EventSourcing;
-using Orleans.Runtime;
-using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
