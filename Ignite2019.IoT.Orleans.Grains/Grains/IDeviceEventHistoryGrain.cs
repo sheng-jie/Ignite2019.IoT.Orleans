@@ -3,7 +3,7 @@ using Orleans;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
-    public interface IDeviceEventHistoryGrain : IGrainWithStringKey
+    public interface IDeviceEventHistoryGrain : IGrainWithGuidKey
     {
         Task GetEventHistories();
     }

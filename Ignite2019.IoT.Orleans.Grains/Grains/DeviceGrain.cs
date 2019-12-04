@@ -16,8 +16,8 @@ namespace Ignite2019.IoT.Orleans.Grains
         public override Task OnActivateAsync()
         {
             var streamProvider = this.GetStreamProvider("SMSProvider");
-
-            _deviceEventStream = streamProvider.GetStream<DeviceEvent>(Guid.Empty, "DeviceEvent");
+            var streamId = Guid.NewGuid();
+            _deviceEventStream = streamProvider.GetStream<DeviceEvent>(streamId, "DeviceEvent");
             return base.OnActivateAsync();
         }
 
@@ -43,7 +43,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             }
 
             ConfirmEvents();
-            
+
             _deviceEventStream.OnNextAsync(deviceEvent);
 
             return Task.CompletedTask;
