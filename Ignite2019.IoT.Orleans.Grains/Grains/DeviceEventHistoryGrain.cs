@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.DataAccess;
 using Ignite2019.IoT.Orleans.Events;
 using Ignite2019.IoT.Orleans.Model;
 using Orleans;
 using Orleans.Streams;
+using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
     [ImplicitStreamSubscription("DeviceEvent")]
     public class DeviceEventHistoryGrain : Grain, IDeviceEventHistoryGrain
     {
+        public DataContext DataContext { get; set; }
+
         private IAsyncStream<DeviceEvent> _deviceEventStream;
 
         private List<EventHistory> _eventHistories = new List<EventHistory>();
+
+        public DeviceEventHistoryGrain()
+        {
+            this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
+        }
 
         public override Task OnActivateAsync()
         {
@@ -24,7 +33,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             return base.OnActivateAsync();
         }
 
-        private Task AddEventHistory(DeviceEvent deviceEvent)
+        private async Task AddEventHistory(DeviceEvent deviceEvent)
         {
             var eventHistory = deviceEvent.ToEventHistory();
             switch (deviceEvent)
@@ -39,8 +48,11 @@ namespace Ignite2019.IoT.Orleans.Grains
             }
             this._eventHistories.Add(eventHistory);
 
+            await this.DataContext.EventHistories.AddAsync(eventHistory);
+            await this.DataContext.SaveChangesAsync();
+
             Console.WriteLine($"Added new event for device Id {eventHistory.DeviceId} :{eventHistory.EventType}");
-            return Task.CompletedTask;
+
         }
 
         public Task GetEventHistories()
