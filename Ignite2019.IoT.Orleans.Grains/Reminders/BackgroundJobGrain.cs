@@ -24,6 +24,13 @@ namespace Ignite2019.IoT.Orleans.Reminders
         }
 
 
+        protected override async Task WriteStateAsync()
+        {
+            await base.WriteStateAsync();
+
+            await this.SaveChangesAsync();
+        }
+
         private async Task AddNewBackgroundJob(string command, JobPeriod period)
         {
             this.GetPrimaryKey(out var deviceId);
@@ -40,13 +47,11 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
             this.State = backgroundJob;
             await this.WriteStateAsync();
-
-            await this.SaveChangesAsync();
         }
 
         public async Task CreateReminder(string command, JobPeriod period)
         {
-            var primaryKey = this.GetPrimaryKey();
+            var primaryKey = this.GetPrimaryKey(out var deviceId);
 
             _remindable = await this.RegisterOrUpdateReminder(primaryKey.ToString(), period.DueTime, period.Period);
 
@@ -105,8 +110,6 @@ namespace Ignite2019.IoT.Orleans.Reminders
             this.State.LastExecuteTime = DateTime.Now;
 
             await this.WriteStateAsync();
-
-            await this.SaveChangesAsync();
 
         }
 

@@ -1,0 +1,16 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs.BackgroundJobVM
+
+<wt:form vm="@Model">
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:textbox field="Entity.DeviceId" />
+<wt:combobox field="Entity.JobStatus" />
+<wt:textbox field="Entity.Command" />
+<wt:datetime field="Entity.StartTime" />
+<wt:datetime field="Entity.EndTime" />
+</wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align="AlignEnum.Right">
+        <wt:submitbutton />
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

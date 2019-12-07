@@ -1,0 +1,7 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs.BackgroundJobListVM
+
+<wt:searchpanel vm="@Model" reset-btn="true">
+<wt:row items-per-row="ItemsPerRowEnum.Three">
+</wt:row>
+</wt:searchpanel>
+<wt:grid vm="@Model" url="/BackgroundJob/Search"/>

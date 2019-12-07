@@ -1,0 +1,17 @@
+﻿@model Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs.BackgroundJobVM
+
+<wt:form vm="@Model">
+	<wt:quote>确定要删除这条数据么：</wt:quote>
+<wt:row items-per-row="ItemsPerRowEnum.Two">
+<wt:display field="Entity.DeviceId" />
+<wt:display field="Entity.JobStatus" />
+<wt:display field="Entity.Command" />
+<wt:display field="Entity.StartTime" />
+<wt:display field="Entity.EndTime" />
+</wt:row>
+    <wt:hidden field="Entity.ID" />
+    <wt:row align=" AlignEnum.Right">
+        <wt:submitbutton theme=" ButtonThemeEnum.Warm" text="删除"/>
+        <wt:closebutton />
+    </wt:row>
+</wt:form>

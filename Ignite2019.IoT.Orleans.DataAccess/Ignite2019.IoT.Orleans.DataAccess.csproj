@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20191113152037_add_company_product.cs" />
     <Compile Remove="Migrations\20191113152037_add_company_product.Designer.cs" />
+    <Compile Remove="Migrations\20191207040644_update datetime format.cs" />
+    <Compile Remove="Migrations\20191207040644_update datetime format.Designer.cs" />
   </ItemGroup>
 
 

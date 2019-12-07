@@ -20,12 +20,14 @@ namespace Ignite2019.IoT.Orleans.Model
         public string Command { get; set; }
 
         [Display(Name = "开始时间")]
+        [DataType(DataType.DateTime)]
         public DateTime StartTime { get; set; }
 
         [Display(Name = "执行间隔")]
         public TimeSpan Period { get; set; }
 
         [Display(Name = "结束时间")]
+        [DataType(DataType.DateTime)]
         public DateTime? EndTime { get; set; }
 
 

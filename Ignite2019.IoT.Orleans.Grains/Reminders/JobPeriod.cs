@@ -19,7 +19,7 @@ namespace Ignite2019.IoT.Orleans.Reminders
             StartTime = startTime;
             Period = period;
             EndTime = endTime;
-            DueTime = this.StartTime - DateTime.Now;
+            DueTime = this.StartTime.TimeOfDay;
         }
 
     }
