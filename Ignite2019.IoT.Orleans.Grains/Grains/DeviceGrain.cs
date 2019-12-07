@@ -23,8 +23,6 @@ namespace Ignite2019.IoT.Orleans.Grains
 
         public Task HandleEvent(DeviceEvent deviceEvent)
         {
-            _deviceEventStream.OnNextAsync(deviceEvent);
-
             switch (deviceEvent)
             {
                 case OnlineEvent newEvent:

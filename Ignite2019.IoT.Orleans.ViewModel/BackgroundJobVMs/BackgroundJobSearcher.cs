@@ -14,6 +14,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
     {
         [Display(Name = "设备Id")]
         public String DeviceId { get; set; }
+        public BackgroundJobType? JobType { get; set; }
 
         protected override void InitVM()
         {

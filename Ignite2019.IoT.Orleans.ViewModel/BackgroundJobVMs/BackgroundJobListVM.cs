@@ -32,6 +32,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
         {
             return new List<GridColumn<BackgroundJob_View>>{
                 this.MakeGridHeader(x => x.DeviceId),
+                this.MakeGridHeader(x => x.JobType),
                 this.MakeGridHeader(x => x.JobStatus),
                 this.MakeGridHeader(x => x.Command),
                 this.MakeGridHeader(x => x.StartTime),
@@ -47,10 +48,12 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
         {
             var query = DC.Set<BackgroundJob>()
                 .CheckContain(Searcher.DeviceId, x=>x.DeviceId)
+                .CheckEqual(Searcher.JobType, x=>x.JobType)
                 .Select(x => new BackgroundJob_View
                 {
 				    ID = x.ID,
                     DeviceId = x.DeviceId,
+                    JobType = x.JobType,
                     JobStatus = x.JobStatus,
                     Command = x.Command,
                     StartTime = x.StartTime,

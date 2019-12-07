@@ -14,7 +14,6 @@ namespace Ignite2019.IoT.Orleans.Reminders
     public class BackgroundJobGrain : Grain<BackgroundJob>, IBackgroundJobGrain, IRemindable
     {
         private IDisposable _timer;
-        private IGrainReminder _remindable;
 
         public DataContext DataContext { get; set; }
 
@@ -28,20 +27,24 @@ namespace Ignite2019.IoT.Orleans.Reminders
         {
             await base.WriteStateAsync();
 
-            await this.SaveChangesAsync();
+            if (string.IsNullOrEmpty(this.State.ID.ToString()))
+                this.DataContext.Add(this.State);
+            this.DataContext.Update(this.State);
+            await this.DataContext.SaveChangesAsync();
         }
 
-        private async Task AddNewBackgroundJob(string command, JobPeriod period)
+        private async Task AddNewBackgroundJob(string command, JobPeriod period, BackgroundJobType type)
         {
             this.GetPrimaryKey(out var deviceId);
 
             var backgroundJob = new BackgroundJob()
             {
                 Command = command,
+                JobType = type,
                 DeviceId = deviceId,
                 StartTime = period.StartTime,
                 EndTime = period.EndTime,
-                Period = period.Period.Seconds,
+                Period = period.Period,
                 JobStatus = JobStatus.Pending
             };
 
@@ -51,16 +54,17 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
         public async Task CreateReminder(string command, JobPeriod period)
         {
+            await AddNewBackgroundJob(command, period, BackgroundJobType.Reminder);
+
             var primaryKey = this.GetPrimaryKey(out var deviceId);
 
-            _remindable = await this.RegisterOrUpdateReminder(primaryKey.ToString(), period.DueTime, period.Period);
+            await this.RegisterOrUpdateReminder(primaryKey.ToString(), period.DueTime, TimeSpan.FromMinutes(period.Period));
 
-            await AddNewBackgroundJob(command, period);
         }
 
         public async Task CreateTimer(string command, JobPeriod period)
         {
-            await AddNewBackgroundJob(command, period);
+            await AddNewBackgroundJob(command, period, BackgroundJobType.Timer);
 
             _timer = this.RegisterTimer(async (state) =>
             {
@@ -74,7 +78,7 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
                 await HandleBackgroundJob();
 
-            }, this.State, period.DueTime, period.Period);
+            }, this.State, period.DueTime, TimeSpan.FromSeconds(period.Period));
 
         }
 
@@ -83,10 +87,11 @@ namespace Ignite2019.IoT.Orleans.Reminders
         {
             if (this.State.IsStopped)
             {
-                await UnregisterReminder(_remindable);
+
+                var reminder = await this.GetReminder(reminderName);
+                await UnregisterReminder(reminder);
                 this.State.JobStatus = JobStatus.Stopped;
-                this._remindable = null;
-                
+
                 await this.WriteStateAsync();
                 return;
             }
@@ -114,31 +119,6 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
             await this.WriteStateAsync();
 
-        }
-
-        private async Task SaveChangesAsync()
-        {
-            var entry = this.DataContext.Entry(this.State);
-            switch (entry.State)
-            {
-                case EntityState.Detached:
-                    this.DataContext.Add(this.State);
-                    break;
-                case EntityState.Modified:
-                    this.DataContext.Update(this.State);
-                    break;
-                case EntityState.Added:
-                    this.DataContext.Add(this.State);
-                    break;
-                case EntityState.Unchanged:
-                    //item already in db no need to do anything  
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            await this.DataContext.SaveChangesAsync();
         }
     }
 }

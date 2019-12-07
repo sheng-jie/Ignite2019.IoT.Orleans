@@ -22,6 +22,8 @@ namespace Ignite2019.IoT.Orleans.Model
         [Required]
         public string DeviceId { get; set; }
 
+        [Display(Name = "任务类型")]
+        [Required]
         public BackgroundJobType JobType { get; set; }
 
         [Display(Name = "任务状态")]
@@ -32,21 +34,23 @@ namespace Ignite2019.IoT.Orleans.Model
         public string Command { get; set; }
 
         [Display(Name = "开始时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH-mm}", ApplyFormatInEditMode=true)]
         [DataType(DataType.DateTime)]
         public DateTime StartTime
         {
-            get => _startTime.HasValue ? _startTime.Value : DateTime.Now;
+            get => _startTime.HasValue ? _startTime.Value : DateTime.Now.AddMinutes(1);
             set => _startTime = value;
         }
 
-        [Display(Name = "执行间隔(单位:秒)")]
+        [Display(Name = "执行间隔")]
         public long Period { get; set; }
 
         [Display(Name = "结束时间")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH-mm}", ApplyFormatInEditMode=true)]
         [DataType(DataType.DateTime)]
         public DateTime? EndTime
         {
-            get => _endTime.HasValue ? _endTime.Value : DateTime.Now;
+            get => _endTime.HasValue ? _endTime.Value : DateTime.Now.AddMinutes(2);
             set => _endTime = value;
         }
 

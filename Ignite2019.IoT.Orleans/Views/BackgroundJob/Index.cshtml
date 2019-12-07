@@ -3,6 +3,7 @@
 <wt:searchpanel vm="@Model" reset-btn="true">
 <wt:row items-per-row="ItemsPerRowEnum.Three">
 <wt:textbox field="Searcher.DeviceId" />
+<wt:combobox field="Searcher.JobType" empty-text="全部" />
 </wt:row>
 </wt:searchpanel>
 <wt:grid vm="@Model" url="/BackgroundJob/Search"/>

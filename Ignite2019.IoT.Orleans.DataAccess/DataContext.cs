@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -37,5 +36,4 @@ namespace Ignite2019.IoT.Orleans.DataAccess
             return new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
         }
     }
-
 }

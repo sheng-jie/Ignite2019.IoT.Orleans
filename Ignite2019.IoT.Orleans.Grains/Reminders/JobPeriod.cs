@@ -10,11 +10,11 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
         public DateTime StartTime { get; set; }
 
-        public TimeSpan Period { get; set; }
+        public long Period { get; set; }
 
         public DateTime? EndTime { get; set; }
 
-        public JobPeriod(DateTime startTime, TimeSpan period, DateTime? endTime)
+        public JobPeriod(DateTime startTime, long period, DateTime? endTime)
         {
             StartTime = startTime;
             Period = period;
@@ -26,7 +26,7 @@ namespace Ignite2019.IoT.Orleans.Reminders
             }
             else
             {
-                DueTime = DateTime.Now.TimeOfDay;
+                DueTime = DateTime.Now.AddSeconds(3).TimeOfDay;
             }
         }
 

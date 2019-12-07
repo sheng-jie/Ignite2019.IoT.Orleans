@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.Model;
 using Ignite2019.IoT.Orleans.Reminders;
 using WalkingTec.Mvvm.Core;
 using WalkingTec.Mvvm.Mvc;
@@ -14,8 +15,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
     
     [ActionDescription("后台任务")]
     public partial class BackgroundJobController : BaseController
-    {
-        private readonly IClusterClient _client;
+    {  private readonly IClusterClient _client;
 
         public BackgroundJobController(IClusterClient client)
         {
@@ -58,10 +58,18 @@ namespace Ignite2019.IoT.Orleans.Controllers
             {
                 var backgroupJobGrain = _client.GetGrain<IBackgroundJobGrain>(Guid.NewGuid(), vm.Entity.DeviceId);
 
-                await backgroupJobGrain.CreateTimer(vm.Entity.Command,
-                    new JobPeriod(vm.Entity.StartTime, TimeSpan.FromSeconds(vm.Entity.Period), vm.Entity.EndTime));
-
+                if (vm.Entity.JobType==BackgroundJobType.Timer)
+                {
+                    await backgroupJobGrain.CreateTimer(vm.Entity.Command,
+                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime));
+                }
+                else
+                {
+                    await backgroupJobGrain.CreateReminder(vm.Entity.Command,
+                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime));
+                }
                 //vm.DoAdd();
+                
                 if (!ModelState.IsValid)
                 {
                     vm.DoReInit();

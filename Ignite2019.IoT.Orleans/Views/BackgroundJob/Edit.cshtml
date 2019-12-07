@@ -3,11 +3,12 @@
 <wt:form vm="@Model">
 <wt:row items-per-row="ItemsPerRowEnum.Two">
 <wt:textbox field="Entity.DeviceId" />
+<wt:combobox field="Entity.JobType" />
 <wt:combobox field="Entity.JobStatus" />
 <wt:textbox field="Entity.Command" />
-<wt:datetime field="Entity.StartTime" />
+<wt:datetime type="DateTime" field="Entity.StartTime" />
 <wt:textbox field="Entity.Period" />
-<wt:datetime field="Entity.EndTime" />
+<wt:datetime type="DateTime" field="Entity.EndTime" />
 </wt:row>
     <wt:hidden field="Entity.ID" />
     <wt:row align="AlignEnum.Right">

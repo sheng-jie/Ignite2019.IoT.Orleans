@@ -51,7 +51,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             await this.DataContext.EventHistories.AddAsync(eventHistory);
             await this.DataContext.SaveChangesAsync();
 
-            Console.WriteLine($"Added new event for device Id {eventHistory.DeviceId} :{eventHistory.EventType}");
+            Console.WriteLine($"Added new event history for device Id {eventHistory.DeviceId} :{eventHistory.EventType}");
 
         }
 
