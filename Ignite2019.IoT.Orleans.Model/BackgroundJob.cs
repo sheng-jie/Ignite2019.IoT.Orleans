@@ -5,30 +5,50 @@ using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Model
 {
+
+    public enum BackgroundJobType
+    {
+        [Display(Name = "秒表")]
+        Timer,
+        [Display(Name = "闹钟")]
+        Reminder,
+    }
     public class BackgroundJob : TopBasePoco
     {
-        [NotMapped]
-        public bool Repeatable => !EndTime.HasValue;
-
+        private DateTime? _startTime;
+        private DateTime? _endTime;
+        
         [Display(Name = "设备Id")]
+        [Required]
         public string DeviceId { get; set; }
+
+        public BackgroundJobType JobType { get; set; }
 
         [Display(Name = "任务状态")]
         public JobStatus JobStatus { get; set; }
 
         [Display(Name = "定时任务")]
+        [Required]
         public string Command { get; set; }
 
         [Display(Name = "开始时间")]
         [DataType(DataType.DateTime)]
-        public DateTime StartTime { get; set; }
+        public DateTime StartTime
+        {
+            get => _startTime.HasValue ? _startTime.Value : DateTime.Now;
+            set => _startTime = value;
+        }
 
-        [Display(Name = "执行间隔")]
-        public TimeSpan Period { get; set; }
+        [Display(Name = "执行间隔(单位:秒)")]
+        public long Period { get; set; }
 
         [Display(Name = "结束时间")]
         [DataType(DataType.DateTime)]
-        public DateTime? EndTime { get; set; }
+        public DateTime? EndTime
+        {
+            get => _endTime.HasValue ? _endTime.Value : DateTime.Now;
+            set => _endTime = value;
+        }
 
 
         [Display(Name = "执行次数")]
@@ -38,7 +58,7 @@ namespace Ignite2019.IoT.Orleans.Model
         public DateTime? LastExecuteTime { get; set; }
 
         [NotMapped]
-        public bool IsStopped => !this.Repeatable && this.ExecutedCount > 0
+        public bool IsStopped => !EndTime.HasValue && this.ExecutedCount > 0
                                  || this.EndTime < DateTime.Now
                                  || this.JobStatus == JobStatus.Stopped;
     }

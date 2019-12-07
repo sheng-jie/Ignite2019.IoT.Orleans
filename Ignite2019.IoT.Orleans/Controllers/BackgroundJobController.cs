@@ -21,7 +21,6 @@ namespace Ignite2019.IoT.Orleans.Controllers
         {
             _client = client;
         }
-
         #region 搜索
         [ActionDescription("搜索")]
         public ActionResult Index()
@@ -57,14 +56,12 @@ namespace Ignite2019.IoT.Orleans.Controllers
             }
             else
             {
-                
                 var backgroupJobGrain = _client.GetGrain<IBackgroundJobGrain>(Guid.NewGuid(), vm.Entity.DeviceId);
 
                 await backgroupJobGrain.CreateTimer(vm.Entity.Command,
-                    new JobPeriod(vm.Entity.StartTime, TimeSpan.FromSeconds(5), vm.Entity.EndTime));
+                    new JobPeriod(vm.Entity.StartTime, TimeSpan.FromSeconds(vm.Entity.Period), vm.Entity.EndTime));
 
                 //vm.DoAdd();
-
                 if (!ModelState.IsValid)
                 {
                     vm.DoReInit();

@@ -2,6 +2,7 @@
 
 <wt:searchpanel vm="@Model" reset-btn="true">
 <wt:row items-per-row="ItemsPerRowEnum.Three">
+<wt:textbox field="Searcher.DeviceId" />
 </wt:row>
 </wt:searchpanel>
 <wt:grid vm="@Model" url="/BackgroundJob/Search"/>

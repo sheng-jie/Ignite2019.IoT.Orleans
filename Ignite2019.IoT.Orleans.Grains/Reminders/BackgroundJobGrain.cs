@@ -41,7 +41,7 @@ namespace Ignite2019.IoT.Orleans.Reminders
                 DeviceId = deviceId,
                 StartTime = period.StartTime,
                 EndTime = period.EndTime,
-                Period = period.Period,
+                Period = period.Period.Seconds,
                 JobStatus = JobStatus.Pending
             };
 
@@ -84,7 +84,10 @@ namespace Ignite2019.IoT.Orleans.Reminders
             if (this.State.IsStopped)
             {
                 await UnregisterReminder(_remindable);
+                this.State.JobStatus = JobStatus.Stopped;
                 this._remindable = null;
+                
+                await this.WriteStateAsync();
                 return;
             }
 

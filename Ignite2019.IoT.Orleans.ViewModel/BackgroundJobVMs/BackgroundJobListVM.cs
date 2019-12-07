@@ -35,6 +35,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
                 this.MakeGridHeader(x => x.JobStatus),
                 this.MakeGridHeader(x => x.Command),
                 this.MakeGridHeader(x => x.StartTime),
+                this.MakeGridHeader(x => x.Period),
                 this.MakeGridHeader(x => x.EndTime),
                 this.MakeGridHeader(x => x.ExecutedCount),
                 this.MakeGridHeader(x => x.LastExecuteTime),
@@ -45,6 +46,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
         public override IOrderedQueryable<BackgroundJob_View> GetSearchQuery()
         {
             var query = DC.Set<BackgroundJob>()
+                .CheckContain(Searcher.DeviceId, x=>x.DeviceId)
                 .Select(x => new BackgroundJob_View
                 {
 				    ID = x.ID,
@@ -52,6 +54,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.BackgroundJobVMs
                     JobStatus = x.JobStatus,
                     Command = x.Command,
                     StartTime = x.StartTime,
+                    Period = x.Period,
                     EndTime = x.EndTime,
                     ExecutedCount = x.ExecutedCount,
                     LastExecuteTime = x.LastExecuteTime,

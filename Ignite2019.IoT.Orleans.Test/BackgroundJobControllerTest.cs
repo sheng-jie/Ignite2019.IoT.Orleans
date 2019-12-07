@@ -42,7 +42,9 @@ namespace Ignite2019.IoT.Orleans.Test
             BackgroundJobVM vm = rv.Model as BackgroundJobVM;
             BackgroundJob v = new BackgroundJob();
 			
-            v.ExecutedCount = 68;
+            v.DeviceId = "PtbRfKXo";
+            v.Period = 7;
+            v.ExecutedCount = 95;
             vm.Entity = v;
             _controller.Create(vm);
 
@@ -50,7 +52,9 @@ namespace Ignite2019.IoT.Orleans.Test
             {
                 var data = context.Set<BackgroundJob>().FirstOrDefault();
 				
-                Assert.AreEqual(data.ExecutedCount, 68);
+                Assert.AreEqual(data.DeviceId, "PtbRfKXo");
+                Assert.AreEqual(data.Period, 7);
+                Assert.AreEqual(data.ExecutedCount, 95);
             }
 
         }
@@ -62,7 +66,9 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
        			
-                v.ExecutedCount = 68;
+                v.DeviceId = "PtbRfKXo";
+                v.Period = 7;
+                v.ExecutedCount = 95;
                 context.Set<BackgroundJob>().Add(v);
                 context.SaveChanges();
             }
@@ -74,10 +80,14 @@ namespace Ignite2019.IoT.Orleans.Test
             v = new BackgroundJob();
             v.ID = vm.Entity.ID;
        		
-            v.ExecutedCount = 7;
+            v.DeviceId = "useGnvi";
+            v.Period = 81;
+            v.ExecutedCount = 3;
             vm.Entity = v;
             vm.FC = new Dictionary<string, object>();
 			
+            vm.FC.Add("Entity.DeviceId", "");
+            vm.FC.Add("Entity.Period", "");
             vm.FC.Add("Entity.ExecutedCount", "");
             _controller.Edit(vm);
 
@@ -85,7 +95,9 @@ namespace Ignite2019.IoT.Orleans.Test
             {
                 var data = context.Set<BackgroundJob>().FirstOrDefault();
  				
-                Assert.AreEqual(data.ExecutedCount, 7);
+                Assert.AreEqual(data.DeviceId, "useGnvi");
+                Assert.AreEqual(data.Period, 81);
+                Assert.AreEqual(data.ExecutedCount, 3);
             }
 
         }
@@ -98,7 +110,9 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
         		
-                v.ExecutedCount = 68;
+                v.DeviceId = "PtbRfKXo";
+                v.Period = 7;
+                v.ExecutedCount = 95;
                 context.Set<BackgroundJob>().Add(v);
                 context.SaveChanges();
             }
@@ -127,7 +141,9 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
 				
-                v.ExecutedCount = 68;
+                v.DeviceId = "PtbRfKXo";
+                v.Period = 7;
+                v.ExecutedCount = 95;
                 context.Set<BackgroundJob>().Add(v);
                 context.SaveChanges();
             }
@@ -144,8 +160,12 @@ namespace Ignite2019.IoT.Orleans.Test
             using (var context = new DataContext(_seed, DBTypeEnum.Memory))
             {
 				
-                v1.ExecutedCount = 68;
-                v2.ExecutedCount = 7;
+                v1.DeviceId = "PtbRfKXo";
+                v1.Period = 7;
+                v1.ExecutedCount = 95;
+                v2.DeviceId = "useGnvi";
+                v2.Period = 81;
+                v2.ExecutedCount = 3;
                 context.Set<BackgroundJob>().Add(v1);
                 context.Set<BackgroundJob>().Add(v2);
                 context.SaveChanges();
