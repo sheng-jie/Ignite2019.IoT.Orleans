@@ -27,9 +27,6 @@ namespace Ignite2019.IoT.Orleans.Reminders
         {
             await base.WriteStateAsync();
 
-            if (string.IsNullOrEmpty(this.State.ID.ToString()))
-                this.DataContext.Add(this.State);
-            this.DataContext.Update(this.State);
             await this.DataContext.SaveChangesAsync();
         }
 
@@ -49,7 +46,11 @@ namespace Ignite2019.IoT.Orleans.Reminders
             };
 
             this.State = backgroundJob;
+
+            await this.DataContext.AddAsync(this.State);
+
             await this.WriteStateAsync();
+
         }
 
         public async Task CreateReminder(string command, JobPeriod period)
@@ -58,7 +59,8 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
             var primaryKey = this.GetPrimaryKey(out var deviceId);
 
-            await this.RegisterOrUpdateReminder(primaryKey.ToString(), period.DueTime, TimeSpan.FromMinutes(period.Period));
+            await this.RegisterOrUpdateReminder(primaryKey.ToString(), TimeSpan.FromMinutes(period.Period),
+                TimeSpan.FromMinutes(period.Period));
 
         }
 
@@ -68,35 +70,40 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
             _timer = this.RegisterTimer(async (state) =>
             {
-                if (this.State.IsStopped)
+                if (DateTime.Now > this.State.StartTime)
                 {
-                    this._timer.Dispose();
-                    this.State.JobStatus = JobStatus.Stopped;
-                    await this.WriteStateAsync();
-                    return;
+                    if (this.State.IsStopped)
+                    {
+                        this._timer.Dispose();
+                        this.State.JobStatus = JobStatus.Stopped;
+                        await this.WriteStateAsync();
+                        return;
+                    }
+
+                    await HandleBackgroundJob();
                 }
 
-                await HandleBackgroundJob();
-
-            }, this.State, period.DueTime, TimeSpan.FromSeconds(period.Period));
+            }, this.State, TimeSpan.FromSeconds(period.Period), TimeSpan.FromSeconds(period.Period));
 
         }
 
 
         public async Task ReceiveReminder(string reminderName, TickStatus status)
         {
-            if (this.State.IsStopped)
+            if (DateTime.Now > this.State.StartTime)
             {
+                if (this.State.IsStopped)
+                {
+                    var reminder = await this.GetReminder(reminderName);
+                    await UnregisterReminder(reminder);
+                    this.State.JobStatus = JobStatus.Stopped;
 
-                var reminder = await this.GetReminder(reminderName);
-                await UnregisterReminder(reminder);
-                this.State.JobStatus = JobStatus.Stopped;
+                    await this.WriteStateAsync();
+                    return;
+                }
 
-                await this.WriteStateAsync();
-                return;
+                await HandleBackgroundJob();
             }
-
-            await HandleBackgroundJob();
         }
 
         private async Task HandleBackgroundJob()
@@ -117,6 +124,7 @@ namespace Ignite2019.IoT.Orleans.Reminders
             this.State.JobStatus = JobStatus.Executed;
             this.State.LastExecuteTime = DateTime.Now;
 
+            this.DataContext.Update(this.State);
             await this.WriteStateAsync();
 
         }

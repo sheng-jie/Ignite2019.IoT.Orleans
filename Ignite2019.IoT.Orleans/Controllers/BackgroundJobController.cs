@@ -61,12 +61,12 @@ namespace Ignite2019.IoT.Orleans.Controllers
                 if (vm.Entity.JobType==BackgroundJobType.Timer)
                 {
                     await backgroupJobGrain.CreateTimer(vm.Entity.Command,
-                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime));
+                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime.Value));
                 }
                 else
                 {
                     await backgroupJobGrain.CreateReminder(vm.Entity.Command,
-                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime));
+                        new JobPeriod(vm.Entity.StartTime, vm.Entity.Period, vm.Entity.EndTime.Value));
                 }
                 //vm.DoAdd();
                 

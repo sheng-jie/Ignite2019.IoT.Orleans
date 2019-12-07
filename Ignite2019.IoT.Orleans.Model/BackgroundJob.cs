@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using WalkingTec.Mvvm.Core;
@@ -17,7 +18,7 @@ namespace Ignite2019.IoT.Orleans.Model
     {
         private DateTime? _startTime;
         private DateTime? _endTime;
-        
+
         [Display(Name = "设备Id")]
         [Required]
         public string DeviceId { get; set; }
@@ -34,23 +35,24 @@ namespace Ignite2019.IoT.Orleans.Model
         public string Command { get; set; }
 
         [Display(Name = "开始时间")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH-mm}", ApplyFormatInEditMode=true)]
+        [Required]
         [DataType(DataType.DateTime)]
         public DateTime StartTime
         {
-            get => _startTime.HasValue ? _startTime.Value : DateTime.Now.AddMinutes(1);
+            get => _startTime.HasValue ? _startTime.Value : DateTime.Now;
             set => _startTime = value;
         }
 
         [Display(Name = "执行间隔")]
+        [DefaultValue(1)]
         public long Period { get; set; }
 
         [Display(Name = "结束时间")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH-mm}", ApplyFormatInEditMode=true)]
+        [Required]
         [DataType(DataType.DateTime)]
         public DateTime? EndTime
         {
-            get => _endTime.HasValue ? _endTime.Value : DateTime.Now.AddMinutes(2);
+            get => _endTime.HasValue ? _endTime.Value : DateTime.Now.AddMinutes(3);
             set => _endTime = value;
         }
 
@@ -62,8 +64,7 @@ namespace Ignite2019.IoT.Orleans.Model
         public DateTime? LastExecuteTime { get; set; }
 
         [NotMapped]
-        public bool IsStopped => !EndTime.HasValue && this.ExecutedCount > 0
-                                 || this.EndTime < DateTime.Now
+        public bool IsStopped => this.EndTime < DateTime.Now
                                  || this.JobStatus == JobStatus.Stopped;
     }
 }
