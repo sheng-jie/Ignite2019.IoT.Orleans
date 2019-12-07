@@ -19,11 +19,9 @@ namespace Ignite2019.IoT.Orleans.States
 
         public bool IsOnline { get; set; }
 
-
         public ShadowDevice Apply(OnlineEvent onlineEvent)
         {
             var eventHistory = onlineEvent.ToEventHistory();
-            eventHistory.EventType = EventType.Online;
             this.IsOnline = true;
             this.AddEventHistory(eventHistory);
 
@@ -35,7 +33,6 @@ namespace Ignite2019.IoT.Orleans.States
         public ShadowDevice Apply(OfflineEvent offlineEvent)
         {
             var eventHistory = offlineEvent.ToEventHistory();
-            eventHistory.EventType = EventType.Offline;
             this.IsOnline = false;
             this.AddEventHistory(eventHistory);
 
@@ -47,7 +44,6 @@ namespace Ignite2019.IoT.Orleans.States
         public ShadowDevice Apply(ReportEvent reportEvent)
         {
             var eventHistory = reportEvent.ToEventHistory();
-            eventHistory.EventType = EventType.Report;
             eventHistory.Detail = reportEvent.Data;
             this.AddEventHistory(eventHistory);
 
@@ -58,9 +54,7 @@ namespace Ignite2019.IoT.Orleans.States
 
         public ShadowDevice Apply(ControlEvent controlEvent)
         {
-
             var eventHistory = controlEvent.ToEventHistory();
-            eventHistory.EventType = EventType.Control;
             eventHistory.Detail = controlEvent.Command.CommandBody;
             eventHistory.UserId = controlEvent.UserId;
 

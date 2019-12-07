@@ -9,7 +9,7 @@ using Orleans.Streams;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
-    public class DeviceGrain : JournaledGrain<ShadowDevice, DeviceEvent>, IDeviceGrain
+    public class DeviceGrain : JournaledGrain<ShadowDevice>, IDeviceGrain
     {
         private IAsyncStream<DeviceEvent> _deviceEventStream;
 
@@ -21,7 +21,7 @@ namespace Ignite2019.IoT.Orleans.Grains
             return base.OnActivateAsync();
         }
 
-        public Task HandleEvent(DeviceEvent deviceEvent)
+        public async Task HandleEvent(DeviceEvent deviceEvent)
         {
             switch (deviceEvent)
             {
@@ -37,18 +37,20 @@ namespace Ignite2019.IoT.Orleans.Grains
                 case ControlEvent newEvent:
                     this.RaiseEvent(newEvent);
                     break;
-
             }
 
-            ConfirmEvents();
+            await ConfirmEvents();
 
-            _deviceEventStream.OnNextAsync(deviceEvent);
-
-            return Task.CompletedTask;
+            await _deviceEventStream.OnNextAsync(deviceEvent);
 
         }
 
+        protected override void OnStateChanged()
+        {
+            Console.WriteLine("state changed");
+            base.OnStateChanged();
 
+        }
 
         public async Task<ShadowDevice> GetShadowDeviceAsync()
         {
