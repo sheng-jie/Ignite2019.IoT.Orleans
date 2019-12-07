@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Reminders\" />
     <Folder Include="Streams\" />
   </ItemGroup>
 
