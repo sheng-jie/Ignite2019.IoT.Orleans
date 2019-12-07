@@ -17,6 +17,7 @@ namespace Ignite2019.IoT.Orleans.DataAccess
         public DbSet<Device> Devices { get; set; }
         public DbSet<Segment> Segments { get; set; }
         public DbSet<EventHistory> EventHistories { get; set; }
+        public DbSet<BackgroundJob> BackgroundJobs { get; set; }
 
         public DataContext(string cs, DBTypeEnum dbtype)
              : base(cs, dbtype)

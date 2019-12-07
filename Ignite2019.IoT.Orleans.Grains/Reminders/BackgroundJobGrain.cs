@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Ignite2019.IoT.Orleans.DataAccess;
 using Ignite2019.IoT.Orleans.Events;
 using Ignite2019.IoT.Orleans.Grains;
 using Ignite2019.IoT.Orleans.Model;
+using Microsoft.EntityFrameworkCore;
 using Orleans;
 using Orleans.Runtime;
+using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Reminders
 {
@@ -12,6 +15,14 @@ namespace Ignite2019.IoT.Orleans.Reminders
     {
         private IDisposable _timer;
         private IGrainReminder _remindable;
+
+        public DataContext DataContext { get; set; }
+
+        public BackgroundJobGrain()
+        {
+            this.DataContext = new DataContext("Server=(localdb)\\mssqllocaldb;Database=Orleans_db;Trusted_Connection=True;MultipleActiveResultSets=true", DBTypeEnum.SqlServer);
+        }
+
 
         private async Task AddNewBackgroundJob(string command, JobPeriod period)
         {
@@ -29,6 +40,8 @@ namespace Ignite2019.IoT.Orleans.Reminders
 
             this.State = backgroundJob;
             await this.WriteStateAsync();
+
+            await this.SaveChangesAsync();
         }
 
         public async Task CreateReminder(string command, JobPeriod period)
@@ -92,6 +105,34 @@ namespace Ignite2019.IoT.Orleans.Reminders
             this.State.LastExecuteTime = DateTime.Now;
 
             await this.WriteStateAsync();
+
+            await this.SaveChangesAsync();
+
+        }
+
+        private async Task SaveChangesAsync()
+        {
+            var entry = this.DataContext.Entry(this.State);
+            switch (entry.State)
+            {
+                case EntityState.Detached:
+                    this.DataContext.Add(this.State);
+                    break;
+                case EntityState.Modified:
+                    this.DataContext.Update(this.State);
+                    break;
+                case EntityState.Added:
+                    this.DataContext.Add(this.State);
+                    break;
+                case EntityState.Unchanged:
+                    //item already in db no need to do anything  
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            await this.DataContext.SaveChangesAsync();
         }
     }
 }
