@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ignite2019.IoT.Orleans.DataAccess;
@@ -10,7 +10,6 @@ using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
-    [ImplicitStreamSubscription("DeviceEvent")]
     public class DeviceEventHistoryGrain : Grain, IDeviceEventHistoryGrain
     {
         public DataContext DataContext { get; set; }

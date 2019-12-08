@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Ignite2019.IoT.Orleans.Events;
 using Ignite2019.IoT.Orleans.Model;
