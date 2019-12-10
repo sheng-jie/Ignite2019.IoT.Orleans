@@ -32,7 +32,7 @@ namespace Ignite2019.IoT.Orleans.Controllers
       Stopwatch watch = new Stopwatch();
       watch.Start();
 
-      var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(10000).ToList();
+      var deviceIds = this.DC.Set<Device>().Select(d => d.ID).Take(100000).ToList();
       deviceIds.AsParallel().ForAll(deviceId =>
       {
             //active the grain
