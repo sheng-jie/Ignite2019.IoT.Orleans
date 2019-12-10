@@ -19,6 +19,7 @@ namespace Ignite2019.IoT.Orleans.ViewModel.DeviceVMs
             {
 
                 this.MakeAction("Device","MockBatchCreate","模拟批量创建","模拟批量创建",GridActionParameterTypesEnum.NoId),
+                this.MakeAction("Device","ActiveShadowDevices","激活影子设备","激活影子设备",GridActionParameterTypesEnum.NoId),
 
                 this.MakeAction("EventHistory","Logs","设备日志","设备日志列表",GridActionParameterTypesEnum.SingleId,dialogWidth:1000,dialogHeight:600),
                 this.MakeStandardAction("Device", GridActionStandardTypesEnum.Create, "新建","", dialogWidth: 800),
