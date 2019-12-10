@@ -10,6 +10,7 @@ using WalkingTec.Mvvm.Core;
 
 namespace Ignite2019.IoT.Orleans.Grains
 {
+    [ImplicitStreamSubscription("DeviceEvent")]
     public class DeviceEventHistoryGrain : Grain, IDeviceEventHistoryGrain
     {
         public DataContext DataContext { get; set; }
@@ -29,6 +30,8 @@ namespace Ignite2019.IoT.Orleans.Grains
             var primaryKey = this.GetPrimaryKey();
             _deviceEventStream = streamProvider.GetStream<DeviceEvent>(primaryKey, "DeviceEvent");
             _deviceEventStream.SubscribeAsync(async (deviceEvent, token) => await this.AddEventHistory(deviceEvent));
+
+            _deviceEventStream.OnCompletedAsync();
             return base.OnActivateAsync();
         }
 
