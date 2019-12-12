@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ignite2019.IoT.Orleans.Model
 {
@@ -9,6 +9,12 @@ namespace Ignite2019.IoT.Orleans.Model
         [Display(Name = "保险箱")]
         Box,
         [Display(Name = "灯")]
-        Light
+        Light,
+        [Display(Name="音箱")]
+        VoiceBox,
+        [Display(Name = "手环")]
+        Watch,
+        [Display(Name = "窗帘")]
+        Curtain
     }
 }
